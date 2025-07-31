@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 00:08:59 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/08/01 00:24:15 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/08/01 00:43:09 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ int	contains_cub(char *filename)
 {
 	char	*type;
 
-	type = strrchr(filename, '.');
+	type = ft_strrchr(filename, '.');
 	if (!type)
+		return (1);
+	if (ft_strcmp(type, ".cub") == 0)
 		return (0);
-	if (!strcmp(type, ".cub"))
-		return (0);
-	return (1);
+	else
+		return (1);
 }
 
 int	main(int argc, char **argv)
