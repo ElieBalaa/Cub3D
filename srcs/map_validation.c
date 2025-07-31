@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   map_validation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omar-iskandarani <omar-iskandarani@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/01 00:09:36 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/08/01 02:05:27 by omar-iskand      ###   ########.fr       */
+/*   Created: 2025/08/01 02:04:38 by omar-iskand       #+#    #+#             */
+/*   Updated: 2025/08/01 02:05:05 by omar-iskand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include "../includes/cub3d.h"
 
-# include "../libft/libft.h"
-# include "../get_next_line/get_next_line.h"
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include <stdio.h>
-# include <string.h>
+int	contains_cub(char *filename)
+{
+	char	*type;
 
-int	contains_cub(char *filename);
-
-#endif
+	type = ft_strrchr(filename, '.');
+	if (!type)
+		return (1);
+	if (ft_strcmp(type, ".cub") == 0)
+		return (0);
+	else
+		return (1);
+}
