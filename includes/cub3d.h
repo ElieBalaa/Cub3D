@@ -6,7 +6,7 @@
 /*   By: omar-iskandarani <omar-iskandarani@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 00:09:36 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/08/01 02:05:27 by omar-iskand      ###   ########.fr       */
+/*   Updated: 2025/08/01 02:25:08 by omar-iskand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,7 @@
 # include <string.h>
 
 int	contains_cub(char *filename);
+int	is_valid_char(char c);
+int	exit_error(char *msg);
 
 #endif
