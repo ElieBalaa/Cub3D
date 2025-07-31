@@ -29,7 +29,7 @@ $(OBJ_DIR)/%.o: %.c
 
 clean:
 	@make -C $(LIBFT_DIR) clean > /dev/null
-	@make -C $(MLX_DIR) clean > /dev/null
+# 	@make -C $(MLX_DIR) clean > /dev/null
 	@rm -rf $(OBJ_DIR)
 	@echo "\033[1;36m[$(NAME)] objects and obj/ directory removed.\033[0m"
 
