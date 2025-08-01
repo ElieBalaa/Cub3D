@@ -112,3 +112,20 @@ void	draw_ray_line(t_game *game, t_line line)
 		i++;
 	}
 }
+
+void	draw_direction_line(t_game *game, int player_x, int player_y)
+{
+	int		i;
+	double	line_length;
+
+	line_length = 20.0;
+	i = 0;
+	while (i <= (int)line_length)
+	{
+		put_pixel(game,
+			player_x + (int)(game->player.dir.x * i),
+			player_y + (int)(game->player.dir.y * i),
+			COLOR_RED);
+		i++;
+	}
+}

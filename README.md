@@ -4,10 +4,13 @@ A Wolfenstein 3D-style raycasting engine built with MinilibX.
 
 ## 🎮 Features
 
+- **3D First-Person View**: Immersive raycasting-based 3D rendering
+- **2D Map View**: Top-down debugging view (toggle with TAB)
 - **Player Movement**: WASD keys for movement, arrow keys for rotation
 - **Sprint Mechanic**: Hold Shift + movement keys for 4x speed
 - **Collision Detection**: Prevents walking through walls
-- **Raycasting Engine**: Full field of view rendering
+- **Distance-Based Shading**: Walls get darker with distance for realistic depth
+- **Real-time Rendering**: Smooth 60 FPS 3D perspective
 - **Map Parsing**: Reads `.cub` files for map data
 - **Norminette Compliant**: All code follows 42 coding standards
 
@@ -26,7 +29,7 @@ Cub3D/
 │   ├── movement.c       # Player movement logic
 │   ├── collision.c      # Collision detection
 │   ├── rendering.c      # Drawing functions
-│   ├── raycasting.c     # Ray calculation
+│   ├── raycasting.c     # 3D raycasting engine
 │   └── map_parser.c     # Map file parsing
 ├── includes/            # Header files
 │   ├── cub3d.h         # Main header
@@ -49,7 +52,7 @@ make
 
 ### Run
 ```bash
-./cub3d maps/test.cub
+./cub3d test.cub
 ```
 
 ### Clean
@@ -69,6 +72,7 @@ make fclean
 | **←** | Rotate left |
 | **→** | Rotate right |
 | **Shift + Movement** | Sprint (4x speed) |
+| **TAB** | Toggle between 3D and 2D view |
 | **ESC** | Exit game |
 
 ## 📁 Map Format (.cub)
@@ -94,6 +98,13 @@ The game reads `.cub` files containing map data:
 
 ## 🔧 Technical Details
 
+### 3D Raycasting Engine
+- **Ray Casting**: One ray per screen column for 3D perspective
+- **Distance Calculation**: Accurate wall distance measurements
+- **Height Projection**: Walls scale based on distance from player
+- **Fish-eye Correction**: Proper perspective correction
+- **Distance Shading**: Walls fade to darker colors with distance
+
 ### Norminette Compliance
 - ✅ Max 25 lines per function
 - ✅ Max 5 functions per file
@@ -110,16 +121,23 @@ The game reads `.cub` files containing map data:
 
 ## 🎨 Rendering
 
-- **2D Map View**: Top-down view of the game world
-- **Player Representation**: Green square with red direction line
-- **Raycasting**: Blue lines showing ray collisions
+### 3D View (Default)
+- **First-Person Perspective**: Immersive 3D raycasting view
+- **Sky Blue Ceiling**: Light blue ceiling color
+- **Brown Floor**: Earth-tone floor color
+- **Distance Shading**: Walls get darker as they get farther
 - **Real-time Updates**: Smooth 60 FPS rendering
+
+### 2D Debug View (TAB to toggle)
+- **Top-down Map**: Bird's eye view of the game world
+- **Player Representation**: Green square with red direction line
+- **Map Scaling**: Configurable map display scale
 
 ## 🐛 Debug Features
 
-- **Visual Debugging**: Player position and direction indicators
-- **Collision Visualization**: Ray lines show collision detection
-- **Map Scaling**: Configurable map display scale
+- **View Toggle**: Switch between 3D and 2D views with TAB
+- **Visual Debugging**: Player position and direction indicators in 2D mode
+- **Map Visualization**: Clear map layout in debug mode
 
 ## 📝 License
 

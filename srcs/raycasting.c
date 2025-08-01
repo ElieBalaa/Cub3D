@@ -12,104 +12,86 @@
 
 #include "../includes/cub3d.h"
 
-void	draw_line(t_game *game, float start_x)
+double	calculate_distance(double x1, double y1, double x2, double y2)
 {
-	float	cos_angle;
-	float	sin_angle;
-	float	ray_x;
-	float	ray_y;
+	double	dx;
+	double	dy;
 
-	cos_angle = cos(start_x);
-	sin_angle = sin(start_x);
+	dx = x2 - x1;
+	dy = y2 - y1;
+	return (sqrt(dx * dx + dy * dy));
+}
+
+void	draw_wall_slice(t_game *game, int x, double distance)
+{
+	double	height;
+	int		start_y;
+	int		end_y;
+	int		y;
+	int		wall_color;
+
+	height = (MAP_SCALE * WINDOW_HEIGHT) / distance;
+	start_y = (WINDOW_HEIGHT / 2) - (height / 2);
+	end_y = (WINDOW_HEIGHT / 2) + (height / 2);
+	if (start_y < 0)
+		start_y = 0;
+	if (end_y >= WINDOW_HEIGHT)
+		end_y = WINDOW_HEIGHT - 1;
+	wall_color = 255 - (int)(distance * 2);
+	if (wall_color < 100)
+		wall_color = 100;
+	wall_color = (wall_color << 16) | (wall_color << 8) | wall_color;
+	y = 0;
+	while (y < WINDOW_HEIGHT)
+	{
+		if (y < start_y)
+			put_pixel(game, x, y, 0x87CEEB);
+		else if (y >= start_y && y <= end_y)
+			put_pixel(game, x, y, wall_color);
+		else
+			put_pixel(game, x, y, 0x8B4513);
+		y++;
+	}
+}
+
+double	cast_single_ray(t_game *game, double angle)
+{
+	double	ray_x;
+	double	ray_y;
+	double	cos_angle;
+	double	sin_angle;
+
+	cos_angle = cos(angle);
+	sin_angle = sin(angle);
 	ray_x = game->player.pos.x;
 	ray_y = game->player.pos.y;
 	while (!touch(ray_x, ray_y, game))
 	{
-		put_pixel(game, (int)ray_x, (int)ray_y, 0xFF8000);
-		ray_x += cos_angle;
-		ray_y += sin_angle;
+		ray_x += cos_angle * 0.5;
+		ray_y += sin_angle * 0.5;
 	}
+	return (calculate_distance(game->player.pos.x, game->player.pos.y,
+			ray_x, ray_y));
 }
 
-void	cast_fov_rays(t_game *game)
+void	render_3d_view(t_game *game)
 {
-	int		i;
-	int		num_rays;
-	double	fov_angle;
+	int		x;
 	double	ray_angle;
 	double	base_angle;
+	double	fov_rad;
+	double	distance;
 
-	num_rays = 360;
-	fov_angle = 90.0 * M_PI / 180.0;
+	fov_rad = FOV * M_PI / 180.0;
 	base_angle = atan2(game->player.dir.y, game->player.dir.x);
-	i = 0;
-	while (i < num_rays)
+	x = 0;
+	while (x < WINDOW_WIDTH)
 	{
-		ray_angle = base_angle + (fov_angle / 2.0)
-			* ((double)(i - num_rays / 2) / (double)(num_rays / 2));
-		draw_line(game, ray_angle);
-		i++;
-	}
-}
-
-int	ray_hit_wall(t_game *game, double ray_x, double ray_y)
-{
-	int	map_x;
-	int	map_y;
-
-	map_x = (int)(ray_x / MAP_SCALE);
-	map_y = (int)(ray_y / MAP_SCALE);
-	if (map_y >= 0 && map_y < game->map.height
-		&& map_x >= 0 && map_x < (int)ft_strlen(game->map.grid[map_y]))
-	{
-		if (game->map.grid[map_y][map_x] == '1')
-			return (1);
-		return (0);
-	}
-	return (1);
-}
-
-void	cast_ray(t_game *game, double ray_dir_x, double ray_dir_y)
-{
-	double	ray_x;
-	double	ray_y;
-	int		hit;
-	t_line	line;
-
-	if (ray_dir_x == 0.0 && ray_dir_y == 0.0)
-		return ;
-	ray_x = game->player.pos.x;
-	ray_y = game->player.pos.y;
-	hit = 0;
-	while (!hit)
-	{
-		hit = ray_hit_wall(game, ray_x, ray_y);
-		if (!hit)
-		{
-			ray_x += ray_dir_x * 0.5;
-			ray_y += ray_dir_y * 0.5;
-		}
-	}
-	line.start_x = (int)game->player.pos.x;
-	line.start_y = (int)game->player.pos.y;
-	line.end_x = (int)ray_x;
-	line.end_y = (int)ray_y;
-	draw_ray_line(game, line);
-}
-
-void	draw_direction_line(t_game *game, int player_x, int player_y)
-{
-	int		i;
-	double	line_length;
-
-	line_length = 20.0;
-	i = 0;
-	while (i <= (int)line_length)
-	{
-		put_pixel(game,
-			player_x + (int)(game->player.dir.x * i),
-			player_y + (int)(game->player.dir.y * i),
-			COLOR_RED);
-		i++;
+		ray_angle = base_angle + (fov_rad / 2.0)
+			- (x * fov_rad / WINDOW_WIDTH);
+		distance = cast_single_ray(game, ray_angle);
+		distance = distance * cos(ray_angle - base_angle);
+		draw_wall_slice(game, x, distance);
+		x++;
 	}
 }

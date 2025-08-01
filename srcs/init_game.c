@@ -60,11 +60,7 @@ int	init_map(t_game *game)
 
 int	init_game(t_game *game)
 {
-	if (init_mlx(game) != 0)
-		return (1);
-	if (init_player(game) != 0)
-		return (1);
-	if (init_map(game) != 0)
+	if (init_mlx(game) || init_player(game) || init_map(game))
 		return (1);
 	game->keys.w = 0;
 	game->keys.a = 0;
@@ -73,6 +69,7 @@ int	init_game(t_game *game)
 	game->keys.left = 0;
 	game->keys.right = 0;
 	game->keys.shift = 0;
+	game->view_3d = 1;
 	return (0);
 }
 
