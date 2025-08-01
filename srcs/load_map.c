@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   load_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/01 00:09:36 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/08/01 12:48:06 by oiskanda         ###   ########.fr       */
+/*   Created: 2025/08/01 12:43:59 by oiskanda          #+#    #+#             */
+/*   Updated: 2025/08/01 13:01:48 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include "../includes/cub3d.h"
 
-# include "../libft/libft.h"
-# include "../get_next_line/get_next_line.h"
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include <stdio.h>
-# include <string.h>
+int	open_map(char *filename)
+{
+	char	*str;
+	int		fd;
 
-int	contains_cub(char *filename);
-int	is_valid_char(char c);
-int	exit_error(char *msg);
-
-int	open_map(char *filename);
-
-#endif
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		return (-1);
+	str = get_next_line(fd);
+	if (!str)
+		return (-1);
+	while (str)
+	{
+		printf("%s\n", str);
+		free(str);
+		str = get_next_line(fd);
+	}
+	free(str);
+	close(fd);
+	return (0);
+}

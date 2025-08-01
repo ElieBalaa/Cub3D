@@ -6,13 +6,13 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 13:59:40 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/05/27 13:17:44 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/08/01 12:57:54 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	g_strlen(const char *s)
 {
 	size_t	i;
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*g_strchr(const char *s, int c)
 {
 	size_t	i;
 
@@ -40,7 +40,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*g_strjoin(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
@@ -52,7 +52,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		s1[0] = '\0';
 	}
 	new_str = (char *)malloc(sizeof(char)
-			* (ft_strlen(s1) + ft_strlen(s2) + 1));
+			* (g_strlen(s1) + g_strlen(s2) + 1));
 	if (!new_str)
 		return (NULL);
 	i = 0;
@@ -111,7 +111,7 @@ char	*ft_copy_left_from_buffer(char *str)
 		return (NULL);
 	}
 	i++;
-	res = (char *)malloc(sizeof(char) * (ft_strlen(str) - i + 1));
+	res = (char *)malloc(sizeof(char) * (g_strlen(str) - i + 1));
 	if (!res)
 		return (NULL);
 	j = 0;

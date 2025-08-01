@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 13:59:34 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/05/27 13:00:58 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/08/01 12:57:31 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*read_line(int fd, char *str)
 	if (!buffer)
 		return (NULL);
 	read_bytes = 1;
-	while ((!ft_strchr(str, '\n') || !ft_strchr(str, '\0')) && read_bytes != 0)
+	while ((!g_strchr(str, '\n') || !g_strchr(str, '\0')) && read_bytes != 0)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
 		if (read_bytes == -1)
@@ -30,7 +30,7 @@ char	*read_line(int fd, char *str)
 			return (NULL);
 		}
 		buffer[read_bytes] = '\0';
-		str = ft_strjoin(str, buffer);
+		str = g_strjoin(str, buffer);
 	}
 	free(buffer);
 	return (str);
