@@ -1,6 +1,6 @@
 # Cub3D
 
-A 3D raycasting game engine inspired by Wolfenstein 3D, built with MinilibX.
+A 3D raycasting game engine inspired by Wolfenstein 3D, built with MinilibX. Features a Lebanese military theme with textured walls and floors.
 
 ## Features
 
@@ -10,6 +10,7 @@ A 3D raycasting game engine inspired by Wolfenstein 3D, built with MinilibX.
 - **Player Rotation** - Arrow keys for view rotation
 - **Sprint Mechanic** - Hold Shift while moving for increased speed
 - **Fullscreen Toggle** - Press F to switch between windowed and fullscreen modes
+- **Texture Mapping** - XPM texture support for walls and floors
 
 ### 🗺️ **Minimap System**
 - **Responsive Circular Minimap** - Positioned at bottom-right corner
@@ -18,11 +19,19 @@ A 3D raycasting game engine inspired by Wolfenstein 3D, built with MinilibX.
 - **Dynamic Scaling** - Adapts to different window sizes
 - **Direction Indicator** - Shows player's current facing direction
 
+### 🎨 **Lebanese Military Theme**
+- **Military Textures** - Lebanese flag and military camouflage wall textures
+- **Themed Maps** - Lebanese military-themed map layouts
+- **Custom Floor Textures** - Military-style floor patterns
+- **Atmospheric Colors** - Military color scheme for ceiling and floor
+
 ### 🎯 **Technical Features**
-- **Map Parsing** - Supports .cub files with custom map layouts
+- **Map Parsing** - Supports .cub files with texture paths and color definitions
+- **Texture System** - XPM texture loading and rendering
 - **Collision Detection** - Prevents walking through walls
 - **Memory Management** - Proper cleanup and resource management
 - **Event Handling** - Responsive keyboard and window event handling
+- **Norminette Compliant** - All source files follow 42 coding standards
 
 ## Controls
 
@@ -53,13 +62,28 @@ cd Cub3D
 # Build the project
 make
 
-# Run with a map file
+# Run with the Lebanese military map
+./cub3d maps/lebanese_military.cub
+
+# Or run with the test map
 ./cub3d maps/test.cub
 ```
 
-### Map Format
-Create a `.cub` file with your map layout:
+### Map Format (.cub files)
+Create a `.cub` file with texture definitions and map layout:
+
 ```
+# Texture paths (required)
+NO ./textures/walls/wall.xpm
+SO ./textures/walls/wall.xpm
+WE ./textures/walls/wall.xpm
+EA ./textures/walls/wall.xpm
+
+# Floor and ceiling colors (RGB format)
+F 139,69,19
+C 135,206,235
+
+# Map layout (after empty line)
 1111111111
 1000000001
 1000000001
@@ -86,62 +110,70 @@ Cub3D/
 │   ├── game_loop.c         # Main game loop and input handling
 │   ├── movement.c          # Player movement logic
 │   ├── raycasting.c        # 3D rendering engine
+│   ├── ray_utils.c         # Raycasting utilities
+│   ├── ray_helpers.c       # Raycasting helper functions
 │   ├── collision.c         # Collision detection
 │   ├── rendering.c         # 2D drawing functions
 │   ├── minimap.c           # Minimap rendering
 │   ├── minimap_utils.c     # Minimap utility functions
 │   ├── window_utils.c      # Window management utilities
 │   ├── map_parser.c        # Map file parsing
+│   ├── map_utils.c         # Map utility functions
+│   ├── map_helpers.c       # Map helper functions
+│   ├── texture_utils.c     # Texture loading and management
 │   └── utils.c             # General utilities
 ├── includes/
 │   └── cub3d.h            # Main header file
 ├── libft/                  # Custom library functions
 ├── get_next_line/          # File reading utilities
-└── maps/                   # Map files
+├── textures/
+│   ├── walls/              # Wall texture files (.xpm)
+│   └── floor/              # Floor texture files (.xpm)
+├── maps/                   # Map files (.cub)
+└── LEBANESE_MILITARY_THEME.md # Theme documentation
 ```
 
 ## Technical Details
 
-### Rendering Engine
-- **Raycasting Algorithm** - Casts rays from player position to determine wall distances
-- **Distance-Based Shading** - Walls appear darker at greater distances
-- **Field of View** - 60-degree FOV for realistic perspective
-- **Wall Slicing** - Each vertical slice represents one ray
+### **Raycasting Engine**
+- **DDA Algorithm** - Digital Differential Analyzer for efficient wall detection
+- **Texture Mapping** - Perspective-correct texture rendering
+- **Distance Shading** - Walls appear darker at greater distances
+- **Floor Casting** - Textured floor rendering with perspective correction
 
-### Performance Features
-- **Optimized Raycasting** - Efficient collision detection with early termination
-- **Memory Efficient** - Minimal memory allocation and proper cleanup
-- **Smooth Movement** - 60 FPS target with responsive controls
+### **Modular Architecture**
+- **Separation of Concerns** - Each file has a specific responsibility
+- **Norminette Compliance** - Max 25 lines per function, max 4 parameters
+- **Memory Safety** - Proper allocation and deallocation
+- **Error Handling** - Graceful error handling and cleanup
 
-### Code Quality
-- **42 Norminette Compliant** - Follows strict coding standards
-- **Modular Design** - Functions split across logical files
-- **Error Handling** - Comprehensive error checking and reporting
-- **Documentation** - Clear function documentation and comments
+### **Performance Optimizations**
+- **Efficient Rendering** - Only renders visible walls
+- **Collision Optimization** - Fast collision detection algorithms
+- **Memory Management** - Minimal memory footprint
+- **Event-Driven** - Responsive input handling
 
 ## Development
 
-### Building for Development
-```bash
-# Clean build
-make fclean && make
+### **Coding Standards**
+- **42 Norminette** - All source files follow strict coding standards
+- **Function Limits** - Max 25 lines per function, max 4 parameters
+- **File Structure** - Max 5 functions per file for modularity
+- **Naming Convention** - snake_case for all identifiers
 
-# Check for memory leaks
-make leaks
+### **Build System**
+- **Makefile** - Automated build process
+- **Dependencies** - Automatic library linking
+- **Clean Targets** - Easy cleanup and rebuild
 
-# Run norminette check
-make norm
-```
+## Contributing
 
-### Debugging
-- Use `make leaks` for memory leak detection
-- Check console output for error messages
-- Validate map files before running
+1. Follow 42 Norminette coding standards
+2. Ensure all functions are under 25 lines
+3. Keep functions to maximum 4 parameters
+4. Test with different map files
+5. Update documentation for new features
 
-## Author
+## License
 
-**Omar Iskandarani** - 42 Beirut Student
-
----
-
-*This project is part of the 42 curriculum, demonstrating advanced C programming concepts including graphics programming, memory management, and algorithm implementation.* 
+This project is part of the 42 curriculum and follows 42 coding standards. 
