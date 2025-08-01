@@ -49,7 +49,7 @@ make
 
 ### Run
 ```bash
-./cub3d test.cub
+./cub3d maps/test.cub
 ```
 
 ### Clean
