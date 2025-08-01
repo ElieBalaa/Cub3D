@@ -15,13 +15,14 @@
 void	put_pixel(t_game *game, int x, int y, int color)
 {
 	char	*dst;
-	int		offset;
 
-	if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
-		return ;
-	offset = (y * game->mlx.line_length) + (x * (game->mlx.bits_per_pixel / 8));
-	dst = game->mlx.img_addr + offset;
-	*(unsigned int *)dst = color;
+	if (x >= 0 && x < game->mlx.current_width && y >= 0
+		&& y < game->mlx.current_height)
+	{
+		dst = game->mlx.img_addr + (y * game->mlx.line_length
+			+ x * (game->mlx.bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
 }
 
 void	draw_square(t_game *game, t_square sq)
@@ -48,10 +49,10 @@ void	clear_screen(t_game *game, int color)
 	int	y;
 
 	y = 0;
-	while (y < WINDOW_HEIGHT)
+	while (y < game->mlx.current_height)
 	{
 		x = 0;
-		while (x < WINDOW_WIDTH)
+		while (x < game->mlx.current_width)
 		{
 			put_pixel(game, x, y, color);
 			x++;
@@ -68,11 +69,11 @@ void	draw_map(t_game *game)
 	if (!game->map.grid)
 		return ;
 	y = 0;
-	while (y < game->map.height && (y * MAP_SCALE) < WINDOW_HEIGHT)
+	while (y < game->map.height && (y * MAP_SCALE) < game->mlx.current_height)
 	{
 		x = 0;
 		while (x < (int)ft_strlen(game->map.grid[y])
-			&& (x * MAP_SCALE) < WINDOW_WIDTH)
+			&& (x * MAP_SCALE) < game->mlx.current_width)
 		{
 			draw_map_cell(game, x, y);
 			x++;

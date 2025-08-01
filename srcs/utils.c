@@ -50,14 +50,5 @@ double	calculate_distance(double x1, double y1, double x2, double y2)
 
 int	is_in_minimap_circle(int x, int y, int radius)
 {
-	int	center_x;
-	int	center_y;
-	int	dx;
-	int	dy;
-
-	center_x = WINDOW_WIDTH - MINIMAP_RADIUS - MINIMAP_MARGIN;
-	center_y = WINDOW_HEIGHT - MINIMAP_RADIUS - MINIMAP_MARGIN;
-	dx = x - center_x;
-	dy = y - center_y;
-	return (dx * dx + dy * dy <= radius * radius);
+	return (x * x + y * y <= radius * radius);
 }

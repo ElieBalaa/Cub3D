@@ -17,12 +17,14 @@ int	init_mlx(t_game *game)
 	game->mlx.mlx_ptr = mlx_init();
 	if (!game->mlx.mlx_ptr)
 		return (exit_error("Error: Failed to initialize MLX"));
-	game->mlx.win_ptr = mlx_new_window(game->mlx.mlx_ptr, WINDOW_WIDTH,
-			WINDOW_HEIGHT, "Cub3D");
+	game->mlx.current_width = WINDOW_WIDTH;
+	game->mlx.current_height = WINDOW_HEIGHT;
+	game->mlx.win_ptr = mlx_new_window(game->mlx.mlx_ptr,
+		game->mlx.current_width, game->mlx.current_height, "Cub3D");
 	if (!game->mlx.win_ptr)
 		return (exit_error("Error: Failed to create window"));
-	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr, WINDOW_WIDTH,
-			WINDOW_HEIGHT);
+	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr,
+		game->mlx.current_width, game->mlx.current_height);
 	if (!game->mlx.img_ptr)
 		return (exit_error("Error: Failed to create image"));
 	game->mlx.img_addr = mlx_get_data_addr(game->mlx.img_ptr,
@@ -33,8 +35,8 @@ int	init_mlx(t_game *game)
 
 int	init_player(t_game *game)
 {
-	game->player.pos.x = 400;
-	game->player.pos.y = 400;
+	game->player.pos.x = 25 * MAP_SCALE + MAP_SCALE / 2;
+	game->player.pos.y = 11 * MAP_SCALE + MAP_SCALE / 2;
 	game->player.dir.x = 0.0;
 	game->player.dir.y = -1.0;
 	game->player.plane.x = 0.66;
@@ -69,6 +71,7 @@ int	init_game(t_game *game)
 	game->keys.left = 0;
 	game->keys.right = 0;
 	game->keys.shift = 0;
+	game->fullscreen = 0;
 	return (0);
 }
 

@@ -26,6 +26,8 @@
 /* Game constants */
 # define WINDOW_WIDTH 1024
 # define WINDOW_HEIGHT 768
+# define FULLSCREEN_WIDTH 1700
+# define FULLSCREEN_HEIGHT 970
 # define TEXTURE_SIZE 64
 # define FOV 60
 # define MOVE_SPEED 1.0
@@ -50,6 +52,7 @@
 # define KEY_RIGHT 65363
 # define KEY_ESC 65307
 # define KEY_SHIFT 65505
+# define KEY_F 102
 
 /* Colors */
 # define COLOR_RED 0xFF0000
@@ -143,6 +146,8 @@ typedef struct s_mlx
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		current_width;
+	int		current_height;
 }	t_mlx;
 
 typedef struct s_ray
@@ -168,6 +173,7 @@ typedef struct s_game
 	t_texture	textures[4];
 	t_ray		ray;
 	t_keys		keys;
+	int			fullscreen;
 }	t_game;
 
 /* Function prototypes */
@@ -194,6 +200,7 @@ int		game_loop(t_game *game);
 int		close_game(t_game *game);
 int		handle_key_press(int keycode, t_game *game);
 int		handle_key_release(int keycode, t_game *game);
+void	toggle_fullscreen(t_game *game);
 
 /* Minimap */
 void	draw_minimap(t_game *game);
