@@ -5,100 +5,61 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: omar-iskandarani <omar-iskandarani@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/01 13:00:00 by omar-iskand       #+#    #+#             */
-/*   Updated: 2025/08/01 13:00:00 by omar-iskand      ###   ########.fr       */
+/*   Created: 2025/08/01 12:00:00 by omar-iskand       #+#    #+#             */
+/*   Updated: 2025/08/01 12:00:00 by omar-iskand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int	calculate_wall_color(double distance)
+void	draw_floor_pixel(t_game *game, int x, int y)
 {
-	int	wall_color;
+	double	floor_x;
+	double	floor_y;
+	int		tex_x;
+	int		tex_y;
+	int		color;
 
-	wall_color = 255 - (int)(distance * 2);
-	if (wall_color < 100)
-		wall_color = 100;
-	wall_color = (wall_color << 16) | (wall_color << 8) | wall_color;
-	return (wall_color);
+	calculate_floor_coords(game, x, y, &floor_x);
+	floor_y = *(double *)(&floor_x + 1);
+	tex_x = (int)(floor_x * 64) % 64;
+	tex_y = (int)(floor_y * 64) % 64;
+	if (tex_x < 0)
+		tex_x += 64;
+	if (tex_y < 0)
+		tex_y += 64;
+	color = get_texture_color(&game->floor_texture, tex_x, tex_y);
+	put_pixel(game, x, y, color);
 }
 
-void	draw_wall_slice(t_game *game, int x, double distance)
+void	draw_textured_wall(t_game *game, t_ray *ray, int x)
 {
-	double	height;
-	int		start_y;
-	int		end_y;
-	int		y;
-	int		wall_color;
+	t_texture	*texture;
 
-	height = (MAP_SCALE * game->mlx.current_height) / distance;
-	start_y = (game->mlx.current_height / 2) - (height / 2);
-	end_y = (game->mlx.current_height / 2) + (height / 2);
-	if (start_y < 0)
-		start_y = 0;
-	if (end_y >= game->mlx.current_height)
-		end_y = game->mlx.current_height - 1;
-	wall_color = calculate_wall_color(distance);
-	y = 0;
-	while (y < game->mlx.current_height)
-	{
-		if (y < start_y)
-			put_pixel(game, x, y, 0x87CEEB);
-		else if (y >= start_y && y <= end_y)
-			put_pixel(game, x, y, wall_color);
-		else
-			put_pixel(game, x, y, 0x8B4513);
-		y++;
-	}
+	texture = get_wall_texture(game, ray);
+	calculate_wall_texture_coords(game, ray, texture);
+	draw_wall_slice(game, ray, x, texture);
 }
 
-double	cast_single_ray(t_game *game, double angle)
+void	cast_ray(t_game *game, int x)
 {
-	double	ray_x;
-	double	ray_y;
-	double	cos_angle;
-	double	sin_angle;
-	int		max_steps;
+	t_ray	ray;
 
-	cos_angle = cos(angle);
-	sin_angle = sin(angle);
-	ray_x = game->player.pos.x;
-	ray_y = game->player.pos.y;
-	max_steps = 0;
-	while (!touch(ray_x, ray_y, game) && max_steps < 2000)
-	{
-		ray_x += cos_angle * 0.5;
-		ray_y += sin_angle * 0.5;
-		max_steps++;
-	}
-	return (calculate_distance(game->player.pos.x, game->player.pos.y,
-			ray_x, ray_y));
-}
-
-void	cast_rays_for_3d(t_game *game, double base_angle, double fov_rad)
-{
-	int		x;
-	double	ray_angle;
-	double	distance;
-
-	x = 0;
-	while (x < game->mlx.current_width)
-	{
-		ray_angle = base_angle + (fov_rad / 2.0)
-			- (x * fov_rad / game->mlx.current_width);
-		distance = cast_single_ray(game, ray_angle);
-		distance = distance * cos(ray_angle - base_angle);
-		draw_wall_slice(game, x, distance);
-		x++;
-	}
+	init_ray(game, &ray, x);
+	calculate_step_and_side_dist(game, &ray);
+	perform_dda(game, &ray);
+	calculate_wall_distance(game, &ray);
+	draw_textured_wall(game, &ray, x);
 }
 
 void	render_3d_view(t_game *game)
 {
-	double	base_angle;
-	double	fov_rad;
+	int	x;
 
-	fov_rad = FOV * M_PI / 180.0;
-	base_angle = atan2(game->player.dir.y, game->player.dir.x);
-	cast_rays_for_3d(game, base_angle, fov_rad);
+	x = 0;
+	while (x < game->mlx.current_width)
+	{
+		cast_ray(game, x);
+		x++;
+	}
 }

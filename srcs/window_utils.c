@@ -39,3 +39,51 @@ void	register_event_handlers(t_game *game)
 	mlx_hook(game->mlx.win_ptr, 3, 1L << 1, handle_key_release, game);
 	mlx_hook(game->mlx.win_ptr, 17, 1L << 17, close_game, game);
 }
+
+void	init_ray(t_game *game, t_ray *ray, int x)
+{
+	double	camera_x;
+
+	camera_x = 2 * x / (double)game->mlx.current_width - 1;
+	ray->dir.x = game->player.dir.x + game->player.plane.x * camera_x;
+	ray->dir.y = game->player.dir.y + game->player.plane.y * camera_x;
+	ray->map.x = (int)game->player.pos.x / MAP_SCALE;
+	ray->map.y = (int)game->player.pos.y / MAP_SCALE;
+	if (ray->dir.x == 0)
+		ray->delta_dist.x = 1e30;
+	else
+		ray->delta_dist.x = fabs(1 / ray->dir.x);
+	if (ray->dir.y == 0)
+		ray->delta_dist.y = 1e30;
+	else
+		ray->delta_dist.y = fabs(1 / ray->dir.y);
+	ray->hit = 0;
+}
+
+void	calculate_step_and_side_dist(t_game *game, t_ray *ray)
+{
+	if (ray->dir.x < 0)
+	{
+		ray->step.x = -1;
+		ray->side_dist.x = (game->player.pos.x / MAP_SCALE - ray->map.x)
+			* ray->delta_dist.x;
+	}
+	else
+	{
+		ray->step.x = 1;
+		ray->side_dist.x = (ray->map.x + 1.0 - game->player.pos.x
+				/ MAP_SCALE) * ray->delta_dist.x;
+	}
+	if (ray->dir.y < 0)
+	{
+		ray->step.y = -1;
+		ray->side_dist.y = (game->player.pos.y / MAP_SCALE - ray->map.y)
+			* ray->delta_dist.y;
+	}
+	else
+	{
+		ray->step.y = 1;
+		ray->side_dist.y = (ray->map.y + 1.0 - game->player.pos.y
+				/ MAP_SCALE) * ray->delta_dist.y;
+	}
+}

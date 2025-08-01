@@ -24,6 +24,8 @@ int	main(int argc, char **argv)
 		return (exit_error("Error: Failed to initialize game"));
 	if (parse_map_file(argv[1], &game) != 0)
 		return (exit_error("Error: Failed to parse map file"));
+	if (load_textures(&game) != 0)
+		return (exit_error("Error: Failed to load textures"));
 	mlx_hook(game.mlx.win_ptr, 2, 1L << 0, handle_key_press, &game);
 	mlx_hook(game.mlx.win_ptr, 3, 1L << 1, handle_key_release, &game);
 	mlx_hook(game.mlx.win_ptr, 17, 1L << 17, close_game, &game);

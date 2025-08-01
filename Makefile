@@ -6,11 +6,16 @@ SRC_DIR = srcs/
 SRC         = main.c \
 	srcs/utils.c \
 	srcs/init_game.c \
+	srcs/texture_utils.c \
 	srcs/game_loop.c \
 	srcs/rendering.c \
 	srcs/map_parser.c \
+	srcs/map_utils.c \
+	srcs/map_helpers.c \
 	srcs/movement.c \
 	srcs/raycasting.c \
+	srcs/ray_utils.c \
+	srcs/ray_helpers.c \
 	srcs/collision.c \
 	srcs/minimap.c \
 	srcs/window_utils.c \

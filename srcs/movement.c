@@ -32,13 +32,13 @@ void	apply_left_right(t_game *game, double *move_x,
 {
 	if (game->keys.a)
 	{
-		*move_x -= game->player.dir.y * speed;
-		*move_y += game->player.dir.x * speed;
+		*move_x += game->player.dir.y * speed;
+		*move_y -= game->player.dir.x * speed;
 	}
 	if (game->keys.d)
 	{
-		*move_x += game->player.dir.y * speed;
-		*move_y -= game->player.dir.x * speed;
+		*move_x -= game->player.dir.y * speed;
+		*move_y += game->player.dir.x * speed;
 	}
 }
 
@@ -81,9 +81,9 @@ void	process_rotation(t_game *game)
 	double	rotation_speed;
 
 	if (game->keys.left)
-		rotation_speed = game->player.rot_speed;
-	else if (game->keys.right)
 		rotation_speed = -game->player.rot_speed;
+	else if (game->keys.right)
+		rotation_speed = game->player.rot_speed;
 	else
 		return ;
 	old_dir_x = game->player.dir.x;

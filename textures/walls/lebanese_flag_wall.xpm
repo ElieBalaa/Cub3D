@@ -1,0 +1,77 @@
+/* XPM */
+static const char *lebanese_flag_wall[] = {
+/* columns rows colors chars-per-pixel */
+"64 64 8 1 ",
+"  c #ED1C24",  /* Lebanese red */
+". c #FFFFFF",  /* White */
+"X c #00A859",  /* Lebanese green */
+"o c #8B4513",  /* Cedar brown */
+"O c #228B22",  /* Cedar green */
+"+ c #F5F5DC",  /* Light beige */
+"@ c #D2691E",  /* Cedar trunk */
+"# c #556B2F",  /* Dark green */
+/* pixels */
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"                                                                ",
+"................................................................",
+"................................OOO.............................",
+"..............................OOOOO............................",
+"............................OOOOOOO.............................",
+"..........................OOOOOOOOO.............................",
+"........................OOOOOOOOOOO..............................",
+"......................OOOOOOOOOOO...............................",
+"....................OOOOOOOOOOO.................................",
+"..................OOOOOOOOOOO...................................",
+"................OOOOOOOOOOO.....................................",
+"..............OOOOOOOOOOO.......................................",
+"............OOOOOOOOOOO.........................................",
+".........OOOOOOOOOOO............................................",
+".......OOOOOOOOOOO..............................................",
+".....OOOOOOOOOOO................................................",
+"...OOOOOOOOOOO..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"...........@@@..................................................",
+"................................................................",
+"................................................................",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}; 

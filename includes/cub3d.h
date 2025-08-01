@@ -163,6 +163,7 @@ typedef struct s_ray
 	int			line_height;
 	int			draw_start;
 	int			draw_end;
+	int			tex_x;
 }	t_ray;
 
 typedef struct s_game
@@ -171,6 +172,7 @@ typedef struct s_game
 	t_player	player;
 	t_map		map;
 	t_texture	textures[4];
+	t_texture	floor_texture;
 	t_ray		ray;
 	t_keys		keys;
 	int			fullscreen;
@@ -188,12 +190,22 @@ int		init_game(t_game *game);
 int		init_mlx(t_game *game);
 int		init_player(t_game *game);
 int		init_map(t_game *game);
+int		load_texture(t_game *game, t_texture *texture, char *path);
+int		load_textures(t_game *game);
 void	cleanup_game(t_game *game);
 
 /* Map parsing */
 int		parse_map_file(char *filename, t_game *game);
 int		read_map_lines(int fd, t_game *game);
 void	free_map(t_game *game);
+char	*trim_spaces(char *str);
+int		parse_color(char *color_str);
+char	*trim_newline(char *str);
+void	process_map_line(char *line, t_game *game, int *i, int *map_started);
+void	free_textures(t_game *game);
+int		count_map_lines(char *filename);
+void	handle_texture_path(char *line, char *prefix, char **texture_ptr);
+void	handle_color(char *line, char *prefix, int *color_ptr);
 
 /* Game loop */
 int		game_loop(t_game *game);
@@ -242,6 +254,17 @@ void	render_3d_view(t_game *game);
 void	cast_rays_for_3d(t_game *game, double base_angle, double fov_rad);
 double	cast_single_ray(t_game *game, double angle);
 int		calculate_wall_color(double distance);
-void	draw_wall_slice(t_game *game, int x, double distance);
+void	draw_wall_slice(t_game *game, t_ray *ray, int x, t_texture *texture);
+void	draw_floor_pixel(t_game *game, int x, int y);
+void	draw_wall_slice_ceiling(t_game *game, int x, int y);
+void	draw_wall_slice_wall(t_game *game, t_ray *ray, int x, int y);
+int		get_texture_color(t_texture *texture, int x, int y);
+void	init_ray(t_game *game, t_ray *ray, int x);
+void	calculate_step_and_side_dist(t_game *game, t_ray *ray);
+void	perform_dda(t_game *game, t_ray *ray);
+void	calculate_wall_distance(t_game *game, t_ray *ray);
+t_texture	*get_wall_texture(t_game *game, t_ray *ray);
+void	calculate_floor_coords(t_game *game, int x, int y, double *floor_x);
+void	calculate_wall_texture_coords(t_game *game, t_ray *ray, t_texture *texture);
 
 #endif
