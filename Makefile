@@ -3,16 +3,18 @@ CC          = cc
 CFLAGS      = -Wall -Wextra -Werror
 # Sources
 SRC_DIR = srcs/
-SRC = main.c \
-	$(SRC_DIR)utils.c \
-	$(SRC_DIR)init_game.c \
-	$(SRC_DIR)game_loop.c \
-	$(SRC_DIR)rendering.c \
-	$(SRC_DIR)map_parser.c \
-	$(SRC_DIR)movement.c \
-	$(SRC_DIR)raycasting.c \
-	$(SRC_DIR)collision.c \
-	$(SRC_DIR)minimap.c
+SRC         = main.c \
+	srcs/utils.c \
+	srcs/init_game.c \
+	srcs/game_loop.c \
+	srcs/rendering.c \
+	srcs/map_parser.c \
+	srcs/movement.c \
+	srcs/raycasting.c \
+	srcs/collision.c \
+	srcs/minimap.c \
+	srcs/window_utils.c \
+	srcs/minimap_utils.c
 OBJ_DIR     = obj
 OBJS        = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 # Directories

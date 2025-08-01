@@ -201,6 +201,10 @@ int		close_game(t_game *game);
 int		handle_key_press(int keycode, t_game *game);
 int		handle_key_release(int keycode, t_game *game);
 void	toggle_fullscreen(t_game *game);
+void	destroy_window_and_image(t_game *game);
+void	create_new_window_and_image(t_game *game,
+			int new_width, int new_height);
+void	register_event_handlers(t_game *game);
 
 /* Minimap */
 void	draw_minimap(t_game *game);
@@ -208,6 +212,7 @@ void	draw_minimap_background_and_border(t_game *game);
 void	draw_minimap_world_cells(t_game *game);
 void	draw_minimap_cell_at_pos(t_game *game, int world_x, int world_y);
 void	draw_minimap_player_professional(t_game *game);
+void	draw_minimap_border_pixel(t_game *game, int x, int y, int center_x);
 
 /* Movement */
 void	process_movement(t_game *game);

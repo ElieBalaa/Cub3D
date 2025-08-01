@@ -20,11 +20,11 @@ int	init_mlx(t_game *game)
 	game->mlx.current_width = WINDOW_WIDTH;
 	game->mlx.current_height = WINDOW_HEIGHT;
 	game->mlx.win_ptr = mlx_new_window(game->mlx.mlx_ptr,
-		game->mlx.current_width, game->mlx.current_height, "Cub3D");
+			game->mlx.current_width, game->mlx.current_height, "Cub3D");
 	if (!game->mlx.win_ptr)
 		return (exit_error("Error: Failed to create window"));
 	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr,
-		game->mlx.current_width, game->mlx.current_height);
+			game->mlx.current_width, game->mlx.current_height);
 	if (!game->mlx.img_ptr)
 		return (exit_error("Error: Failed to create image"));
 	game->mlx.img_addr = mlx_get_data_addr(game->mlx.img_ptr,

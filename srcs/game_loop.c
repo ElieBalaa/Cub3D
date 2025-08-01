@@ -76,22 +76,9 @@ void	toggle_fullscreen(t_game *game)
 		new_width = FULLSCREEN_WIDTH;
 		new_height = FULLSCREEN_HEIGHT;
 	}
-	if (game->mlx.img_ptr)
-		mlx_destroy_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
-	if (game->mlx.win_ptr)
-		mlx_destroy_window(game->mlx.mlx_ptr, game->mlx.win_ptr);
-	game->mlx.current_width = new_width;
-	game->mlx.current_height = new_height;
-	game->mlx.win_ptr = mlx_new_window(game->mlx.mlx_ptr,
-		new_width, new_height, "Cub3D");
-	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr,
-		new_width, new_height);
-	game->mlx.img_addr = mlx_get_data_addr(game->mlx.img_ptr,
-		&game->mlx.bits_per_pixel, &game->mlx.line_length,
-		&game->mlx.endian);
-	mlx_hook(game->mlx.win_ptr, 2, 1L << 0, handle_key_press, game);
-	mlx_hook(game->mlx.win_ptr, 3, 1L << 1, handle_key_release, game);
-	mlx_hook(game->mlx.win_ptr, 17, 1L << 17, close_game, game);
+	destroy_window_and_image(game);
+	create_new_window_and_image(game, new_width, new_height);
+	register_event_handlers(game);
 	game->fullscreen = !game->fullscreen;
 }
 

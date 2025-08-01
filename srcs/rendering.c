@@ -20,7 +20,7 @@ void	put_pixel(t_game *game, int x, int y, int color)
 		&& y < game->mlx.current_height)
 	{
 		dst = game->mlx.img_addr + (y * game->mlx.line_length
-			+ x * (game->mlx.bits_per_pixel / 8));
+				+ x * (game->mlx.bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
 	}
 }

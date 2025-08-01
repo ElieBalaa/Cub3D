@@ -27,15 +27,7 @@ void	draw_minimap_background_and_border(t_game *game)
 		x = center_x - MINIMAP_RADIUS - 5;
 		while (x <= center_x + MINIMAP_RADIUS + 5)
 		{
-			if (is_in_minimap_circle(x - center_x, y - center_y,
-				MINIMAP_RADIUS + 3))
-			{
-				if (is_in_minimap_circle(x - center_x, y - center_y,
-					MINIMAP_RADIUS))
-					put_pixel(game, x, y, MINIMAP_BG);
-				else
-					put_pixel(game, x, y, MINIMAP_BORDER);
-			}
+			draw_minimap_border_pixel(game, x, y, center_x);
 			x++;
 		}
 		y++;
@@ -54,7 +46,7 @@ void	draw_minimap_cell_at_pos(t_game *game, int world_x, int world_y)
 	screen_x = center_x + ((int)game->player.pos.x - world_x) / 4;
 	screen_y = center_y + ((int)game->player.pos.y - world_y) / 4;
 	if (is_in_minimap_circle(screen_x - center_x, screen_y - center_y,
-		MINIMAP_RADIUS - 2))
+			MINIMAP_RADIUS - 2))
 	{
 		if (world_y / MAP_SCALE >= 0 && world_y / MAP_SCALE < game->map.height
 			&& world_x / MAP_SCALE >= 0 && world_x / MAP_SCALE
