@@ -14,6 +14,20 @@
 
 int	main(int argc, char **argv)
 {
-	if (argc == 2)
-		printf("%d\n", contains_cub(argv[1]));
+	t_game	game;
+
+	if (argc != 2)
+		return (exit_error("Usage: ./cub3d <map.cub>"));
+	if (contains_cub(argv[1]) != 0)
+		return (exit_error("Error: Invalid file extension"));
+	if (init_game(&game) != 0)
+		return (exit_error("Error: Failed to initialize game"));
+	if (parse_map_file(argv[1], &game) != 0)
+		return (exit_error("Error: Failed to parse map file"));
+	mlx_hook(game.mlx.win_ptr, 2, 1L << 0, handle_key_press, &game);
+	mlx_hook(game.mlx.win_ptr, 3, 1L << 1, handle_key_release, &game);
+	mlx_hook(game.mlx.win_ptr, 17, 1L << 17, close_game, &game);
+	mlx_loop_hook(game.mlx.mlx_ptr, game_loop, &game);
+	mlx_loop(game.mlx.mlx_ptr);
+	return (0);
 }

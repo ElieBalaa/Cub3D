@@ -15,13 +15,21 @@
 char	*read_line(int fd, char *str)
 {
 	char	*buffer;
+	char	*temp;
 	int		read_bytes;
 
+	if (!str)
+	{
+		str = malloc(sizeof(char) * 1);
+		if (!str)
+			return (NULL);
+		str[0] = '\0';
+	}
 	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
 	read_bytes = 1;
-	while ((!ft_strchr(str, '\n') || !ft_strchr(str, '\0')) && read_bytes != 0)
+	while (!ft_strchr(str, '\n') && read_bytes != 0)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
 		if (read_bytes == -1)
@@ -30,7 +38,14 @@ char	*read_line(int fd, char *str)
 			return (NULL);
 		}
 		buffer[read_bytes] = '\0';
+		temp = str;
 		str = ft_strjoin(str, buffer);
+		free(temp);
+		if (!str)
+		{
+			free(buffer);
+			return (NULL);
+		}
 	}
 	free(buffer);
 	return (str);

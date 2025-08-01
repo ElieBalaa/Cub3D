@@ -17,14 +17,12 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include "../libft/libft.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
 
-size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char *s1, char *s2);
 char	*ft_copy_to_newline(char *str);
 char	*ft_copy_left_from_buffer(char *str);
 char	*get_next_line(int fd);
