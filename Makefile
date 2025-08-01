@@ -23,7 +23,7 @@ SRC         = main.c \
 OBJ_DIR     = obj
 OBJS        = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 # Directories
-MLX_DIR     = includes/mlx
+MLX_DIR     = minilibx-linux
 LIBFT_DIR   = ./libft
 GNL_DIR     = ./get_next_line
 # Libraries

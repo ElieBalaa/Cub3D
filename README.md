@@ -126,6 +126,7 @@ Cub3D/
 │   └── cub3d.h            # Main header file
 ├── libft/                  # Custom library functions
 ├── get_next_line/          # File reading utilities
+├── minilibx-linux/         # MinilibX graphics library
 ├── textures/
 │   ├── walls/              # Wall texture files (.xpm)
 │   └── floor/              # Floor texture files (.xpm)
