@@ -194,7 +194,6 @@ int		check_collision(t_game *game, double x, double y);
 int		check_single_point(t_game *game, int map_x, int map_y);
 int		touch(float ray_x, float ray_y, t_game *game);
 void	draw_map_cell(t_game *game, int x, int y);
-void	draw_direction_line(t_game *game, int player_x, int player_y);
 
 /* Rendering */
 void	put_pixel(t_game *game, int x, int y, int color);
@@ -202,6 +201,7 @@ void	draw_square(t_game *game, t_square sq);
 void	clear_screen(t_game *game, int color);
 void	draw_map(t_game *game);
 void	draw_ray_line(t_game *game, t_line line);
+void	draw_direction_line(t_game *game, int player_x, int player_y);
 
 /* Raycasting */
 void	render_3d_view(t_game *game);
