@@ -31,6 +31,11 @@
 # define MOVE_SPEED 1.0
 # define ROT_SPEED 0.05
 # define MAP_SCALE 40
+# define MINIMAP_SIZE 150
+# define MINIMAP_SCALE 8
+# define MINIMAP_MARGIN 20
+# define MINIMAP_RADIUS 70
+# define MINIMAP_VIEW_DISTANCE 10
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -45,7 +50,6 @@
 # define KEY_RIGHT 65363
 # define KEY_ESC 65307
 # define KEY_SHIFT 65505
-# define KEY_TAB 65289
 
 /* Colors */
 # define COLOR_RED 0xFF0000
@@ -53,6 +57,16 @@
 # define COLOR_BLUE 0x0000FF
 # define COLOR_WHITE 0xFFFFFF
 # define COLOR_BLACK 0x000000
+
+/* Minimap Colors */
+# define MINIMAP_BG 0x1A1A1A
+# define MINIMAP_WALL 0x404040
+# define MINIMAP_FLOOR 0x2A2A2A
+# define MINIMAP_PLAYER 0x00AAFF
+# define MINIMAP_PLAYER_DOT 0xFFFFFF
+# define MINIMAP_DIRECTION 0x00FFAA
+# define MINIMAP_BORDER 0x555555
+# define MINIMAP_BORDER_OUTER 0x000000
 
 typedef struct s_line
 {
@@ -154,13 +168,14 @@ typedef struct s_game
 	t_texture	textures[4];
 	t_ray		ray;
 	t_keys		keys;
-	int			view_3d;
 }	t_game;
 
 /* Function prototypes */
 int		contains_cub(char *filename);
 int		is_valid_char(char c);
 int		exit_error(char *msg);
+double	calculate_distance(double x1, double y1, double x2, double y2);
+int		is_in_minimap_circle(int x, int y, int radius);
 
 /* Game initialization */
 int		init_game(t_game *game);
@@ -179,6 +194,13 @@ int		game_loop(t_game *game);
 int		close_game(t_game *game);
 int		handle_key_press(int keycode, t_game *game);
 int		handle_key_release(int keycode, t_game *game);
+
+/* Minimap */
+void	draw_minimap(t_game *game);
+void	draw_minimap_background_and_border(t_game *game);
+void	draw_minimap_world_cells(t_game *game);
+void	draw_minimap_cell_at_pos(t_game *game, int world_x, int world_y);
+void	draw_minimap_player_professional(t_game *game);
 
 /* Movement */
 void	process_movement(t_game *game);
@@ -205,8 +227,9 @@ void	draw_direction_line(t_game *game, int player_x, int player_y);
 
 /* Raycasting */
 void	render_3d_view(t_game *game);
+void	cast_rays_for_3d(t_game *game, double base_angle, double fov_rad);
 double	cast_single_ray(t_game *game, double angle);
-double	calculate_distance(double x1, double y1, double x2, double y2);
+int		calculate_wall_color(double distance);
 void	draw_wall_slice(t_game *game, int x, double distance);
 
 #endif

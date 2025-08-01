@@ -12,14 +12,15 @@
 
 #include "../includes/cub3d.h"
 
-double	calculate_distance(double x1, double y1, double x2, double y2)
+int	calculate_wall_color(double distance)
 {
-	double	dx;
-	double	dy;
+	int	wall_color;
 
-	dx = x2 - x1;
-	dy = y2 - y1;
-	return (sqrt(dx * dx + dy * dy));
+	wall_color = 255 - (int)(distance * 2);
+	if (wall_color < 100)
+		wall_color = 100;
+	wall_color = (wall_color << 16) | (wall_color << 8) | wall_color;
+	return (wall_color);
 }
 
 void	draw_wall_slice(t_game *game, int x, double distance)
@@ -37,10 +38,7 @@ void	draw_wall_slice(t_game *game, int x, double distance)
 		start_y = 0;
 	if (end_y >= WINDOW_HEIGHT)
 		end_y = WINDOW_HEIGHT - 1;
-	wall_color = 255 - (int)(distance * 2);
-	if (wall_color < 100)
-		wall_color = 100;
-	wall_color = (wall_color << 16) | (wall_color << 8) | wall_color;
+	wall_color = calculate_wall_color(distance);
 	y = 0;
 	while (y < WINDOW_HEIGHT)
 	{
@@ -60,30 +58,29 @@ double	cast_single_ray(t_game *game, double angle)
 	double	ray_y;
 	double	cos_angle;
 	double	sin_angle;
+	int		max_steps;
 
 	cos_angle = cos(angle);
 	sin_angle = sin(angle);
 	ray_x = game->player.pos.x;
 	ray_y = game->player.pos.y;
-	while (!touch(ray_x, ray_y, game))
+	max_steps = 0;
+	while (!touch(ray_x, ray_y, game) && max_steps < 2000)
 	{
 		ray_x += cos_angle * 0.5;
 		ray_y += sin_angle * 0.5;
+		max_steps++;
 	}
 	return (calculate_distance(game->player.pos.x, game->player.pos.y,
 			ray_x, ray_y));
 }
 
-void	render_3d_view(t_game *game)
+void	cast_rays_for_3d(t_game *game, double base_angle, double fov_rad)
 {
 	int		x;
 	double	ray_angle;
-	double	base_angle;
-	double	fov_rad;
 	double	distance;
 
-	fov_rad = FOV * M_PI / 180.0;
-	base_angle = atan2(game->player.dir.y, game->player.dir.x);
 	x = 0;
 	while (x < WINDOW_WIDTH)
 	{
@@ -94,4 +91,14 @@ void	render_3d_view(t_game *game)
 		draw_wall_slice(game, x, distance);
 		x++;
 	}
+}
+
+void	render_3d_view(t_game *game)
+{
+	double	base_angle;
+	double	fov_rad;
+
+	fov_rad = FOV * M_PI / 180.0;
+	base_angle = atan2(game->player.dir.y, game->player.dir.x);
+	cast_rays_for_3d(game, base_angle, fov_rad);
 }

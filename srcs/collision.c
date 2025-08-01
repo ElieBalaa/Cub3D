@@ -19,8 +19,9 @@ int	check_single_point(t_game *game, int map_x, int map_y)
 	{
 		if (game->map.grid[map_y][map_x] == '1')
 			return (1);
+		return (0);
 	}
-	return (0);
+	return (1);
 }
 
 int	check_collision(t_game *game, double x, double y)
@@ -29,7 +30,7 @@ int	check_collision(t_game *game, double x, double y)
 	int	map_y;
 	int	margin;
 
-	margin = 10;
+	margin = 5;
 	map_x = (int)((x + margin) / MAP_SCALE);
 	map_y = (int)((y + margin) / MAP_SCALE);
 	if (check_single_point(game, map_x, map_y))
@@ -61,11 +62,9 @@ int	touch(float ray_x, float ray_y, t_game *game)
 	{
 		if (game->map.grid[map_y][map_x] == '1')
 			return (1);
+		return (0);
 	}
-	if (ray_x < 0 || ray_x >= WINDOW_WIDTH
-		|| ray_y < 0 || ray_y >= WINDOW_HEIGHT)
-		return (1);
-	return (0);
+	return (1);
 }
 
 void	draw_map_cell(t_game *game, int x, int y)

@@ -37,8 +37,6 @@ int	handle_key_press(int keycode, t_game *game)
 		game->keys.right = 1;
 	if (keycode == KEY_SHIFT)
 		game->keys.shift = 1;
-	if (keycode == KEY_TAB)
-		game->view_3d = !game->view_3d;
 	return (0);
 }
 
@@ -63,29 +61,11 @@ int	handle_key_release(int keycode, t_game *game)
 
 int	game_loop(t_game *game)
 {
-	int			player_screen_x;
-	int			player_screen_y;
-	t_square	player_sq;
-
 	process_movement(game);
 	process_rotation(game);
 	clear_screen(game, COLOR_BLACK);
-	if (game->view_3d)
-	{
-		render_3d_view(game);
-	}
-	else
-	{
-		draw_map(game);
-		player_screen_x = (int)(game->player.pos.x);
-		player_screen_y = (int)(game->player.pos.y);
-		player_sq.x = player_screen_x - 8;
-		player_sq.y = player_screen_y - 8;
-		player_sq.size = 16;
-		player_sq.color = 0x00FF00;
-		draw_square(game, player_sq);
-		draw_direction_line(game, player_screen_x, player_screen_y);
-	}
+	render_3d_view(game);
+	draw_minimap(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr,
 		game->mlx.img_ptr, 0, 0);
 	return (0);

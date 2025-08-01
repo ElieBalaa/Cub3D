@@ -11,7 +11,8 @@ SRC = main.c \
 	$(SRC_DIR)map_parser.c \
 	$(SRC_DIR)movement.c \
 	$(SRC_DIR)raycasting.c \
-	$(SRC_DIR)collision.c
+	$(SRC_DIR)collision.c \
+	$(SRC_DIR)minimap.c
 OBJ_DIR     = obj
 OBJS        = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 # Directories

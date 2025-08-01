@@ -69,7 +69,6 @@ int	init_game(t_game *game)
 	game->keys.left = 0;
 	game->keys.right = 0;
 	game->keys.shift = 0;
-	game->view_3d = 1;
 	return (0);
 }
 

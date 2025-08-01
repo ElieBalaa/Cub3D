@@ -68,11 +68,9 @@ void	process_movement(t_game *game)
 	calculate_movement(game, &move_x, &move_y);
 	new_x += move_x;
 	new_y += move_y;
-	if (new_x >= 20 && new_x <= WINDOW_WIDTH - 20
-		&& !check_collision(game, new_x, game->player.pos.y))
+	if (!check_collision(game, new_x, game->player.pos.y))
 		game->player.pos.x = new_x;
-	if (new_y >= 20 && new_y <= WINDOW_HEIGHT - 20
-		&& !check_collision(game, game->player.pos.x, new_y))
+	if (!check_collision(game, game->player.pos.x, new_y))
 		game->player.pos.y = new_y;
 }
 
