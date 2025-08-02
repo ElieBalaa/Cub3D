@@ -22,12 +22,14 @@ void	draw_floor_pixel(t_game *game, int x, int y)
 
 	calculate_floor_coords(game, x, y, &floor_x);
 	floor_y = *(double *)(&floor_x + 1);
-	tex_x = (int)(floor_x * 64) % 64;
-	tex_y = (int)(floor_y * 64) % 64;
+	tex_x = (int)(floor_x * game->floor_texture.width)
+		% game->floor_texture.width;
+	tex_y = (int)(floor_y * game->floor_texture.height)
+		% game->floor_texture.height;
 	if (tex_x < 0)
-		tex_x += 64;
+		tex_x += game->floor_texture.width;
 	if (tex_y < 0)
-		tex_y += 64;
+		tex_y += game->floor_texture.height;
 	color = get_texture_color(&game->floor_texture, tex_x, tex_y);
 	put_pixel(game, x, y, color);
 }

@@ -12,6 +12,17 @@
 
 #include "../includes/cub3d.h"
 
+int	get_texture_color(t_texture *texture, int x, int y)
+{
+	char	*dst;
+
+	if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
+		return (0);
+	dst = texture->addr + (y * texture->line_length + x
+			* (texture->bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
+}
+
 int	load_texture(t_game *game, t_texture *texture, char *path)
 {
 	if (!path)

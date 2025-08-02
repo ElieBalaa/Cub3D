@@ -265,6 +265,8 @@ void		init_ray(t_game *game, t_ray *ray, int x);
 void		calculate_step_and_side_dist(t_game *game, t_ray *ray);
 void		perform_dda(t_game *game, t_ray *ray);
 void		calculate_wall_distance(t_game *game, t_ray *ray);
+void		calculate_perp_wall_dist(t_game *game, t_ray *ray);
+void		calculate_line_height_and_draw_range(t_game *game, t_ray *ray);
 t_texture	*get_wall_texture(t_game *game, t_ray *ray);
 void		calculate_floor_coords(t_game *game, int x, int y, double *floor_x);
 void		calculate_wall_texture_coords(t_game *game, t_ray *ray,
