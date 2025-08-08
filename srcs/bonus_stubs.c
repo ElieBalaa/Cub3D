@@ -17,14 +17,6 @@ void	draw_minimap(t_game *game)
 	(void)game;
 }
 
-int	check_collision(t_game *game, double x, double y)
-{
-	(void)game;
-	(void)x;
-	(void)y;
-	return (0);
-}
-
 void	destroy_window_and_image(t_game *game)
 {
 	(void)game;

@@ -18,3 +18,11 @@ void	draw_map_cell(t_game *game, int x, int y)
 	(void)x;
 	(void)y;
 }
+
+int	check_collision(t_game *game, double x, double y)
+{
+	(void)game;
+	(void)x;
+	(void)y;
+	return (0);
+}
