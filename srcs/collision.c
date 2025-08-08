@@ -19,6 +19,8 @@ int	check_single_point(t_game *game, int map_x, int map_y)
 	{
 		if (game->map.grid[map_y][map_x] == '1')
 			return (1);
+		if (game->map.grid[map_y][map_x] == 'D')
+			return (1);
 		return (0);
 	}
 	return (1);

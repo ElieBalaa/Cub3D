@@ -23,73 +23,20 @@ double	now_seconds(void)
 
 int	init_doors_anim(t_game *game)
 {
-	int	y;
-	int	x;
-
-	game->door_prog = (double **)malloc(sizeof(double *) * game->map.height);
-	game->door_target = (char **)malloc(sizeof(char *) * game->map.height);
-	y = 0;
-	while (game->map.grid[y])
-	{
-		game->door_prog[y] = (double *)malloc(sizeof(double)
-			* ft_strlen(game->map.grid[y]));
-		game->door_target[y] = (char *)malloc(sizeof(char)
-			* ft_strlen(game->map.grid[y]));
-		x = 0;
-		while (x < (int)ft_strlen(game->map.grid[y]))
-		{
-			game->door_prog[y][x] = (game->map.grid[y][x] == 'O');
-			game->door_target[y][x] = (game->map.grid[y][x] == 'O');
-			x++;
-		}
-		y++;
-	}
+	alloc_door_arrays(game);
+	init_door_rows(game);
 	game->door_last_ts = now_seconds();
 	return (0);
 }
 
-void	set_door_target(t_game *game, int x, int y, int opening)
+static void	update_row(t_game *g, int y, double dt)
 {
-	if (y < 0 || y >= game->map.height)
-		return ;
-	if (x < 0 || x >= (int)ft_strlen(game->map.grid[y]))
-		return ;
-	if (game->map.grid[y][x] != 'D' && game->map.grid[y][x] != 'O')
-		return ;
-	game->door_target[y][x] = (opening != 0);
-}
-
-static void	update_row(t_game *g, int y, double speed, double dt)
-{
-	int		x;
-	double	p;
-	int		t;
-	char	c;
+	int	x;
 
 	x = 0;
 	while (x < (int)ft_strlen(g->map.grid[y]))
 	{
-		c = g->map.grid[y][x];
-		if (c != 'D' && c != 'O')
-		{
-			x++;
-			continue ;
-		}
-		p = g->door_prog[y][x];
-		t = g->door_target[y][x];
-		if (t && p < 1.0)
-			p += speed * dt;
-		else if (!t && p > 0.0)
-			p -= speed * dt;
-		if (p > 1.0)
-			p = 1.0;
-		if (p < 0.0)
-			p = 0.0;
-		g->door_prog[y][x] = p;
-		if (p >= 1.0)
-			g->map.grid[y][x] = 'O';
-		else if (p <= 0.0)
-			g->map.grid[y][x] = 'D';
+		process_cell(g, x, y, dt);
 		x++;
 	}
 }
@@ -98,7 +45,6 @@ void	update_doors(t_game *game)
 {
 	double	now;
 	double	dt;
-	double	speed;
 	int		y;
 
 	now = now_seconds();
@@ -106,28 +52,12 @@ void	update_doors(t_game *game)
 	if (dt > DOOR_DT_CAP)
 		dt = DOOR_DT_CAP;
 	game->door_last_ts = now;
-	speed = DOOR_SPEED;
 	if (now - game->door_last_interact > DOOR_CLOSE_DELAY)
-	{
-		y = 0;
-		while (game->map.grid[y])
-		{
-			int x;
-
-			x = 0;
-			while (x < (int)ft_strlen(game->map.grid[y]))
-			{
-				if (game->map.grid[y][x] == 'O')
-					game->door_target[y][x] = 0;
-				x++;
-			}
-			y++;
-		}
-	}
+		update_auto_close_targets(game);
 	y = 0;
 	while (game->map.grid[y])
 	{
-		update_row(game, y, speed, dt);
+		update_row(game, y, dt);
 		y++;
 	}
 }

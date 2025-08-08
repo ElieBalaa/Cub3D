@@ -22,6 +22,8 @@ MANDATORY_SRC = main.c \
 	srcs/raycasting.c \
 	srcs/ray_utils.c \
 	srcs/ray_helpers.c \
+	srcs/ray_helpers_bg.c \
+	srcs/ray_tex_helpers.c \
 	srcs/ray_calculation.c \
 	srcs/mandatory_stubs.c \
 	srcs/bonus_stubs.c \
@@ -33,7 +35,8 @@ BONUS_SRC = srcs/collision.c \
 	srcs/minimap_utils.c \
 	srcs/window_utils.c \
 	srcs/doors_bonus.c \
-	srcs/doors_anim_bonus.c
+	srcs/doors_anim_bonus.c \
+	srcs/doors_anim_utils_bonus.c
 
 # All sources for bonus (without stubs)
 BONUS_ALL_SRC = $(MANDATORY_SRC) $(BONUS_SRC)

@@ -17,7 +17,7 @@ void	try_toggle_door(t_game *game)
 	(void)game;
 }
 
-int		init_doors_anim(t_game *game)
+int	init_doors_anim(t_game *game)
 {
 	(void)game;
 	return (0);
@@ -34,4 +34,4 @@ void	set_door_target(t_game *game, int x, int y, int opening)
 	(void)x;
 	(void)y;
 	(void)opening;
-} 
+}

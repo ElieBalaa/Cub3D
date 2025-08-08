@@ -39,8 +39,10 @@
 # define MINIMAP_RADIUS 70
 # define MINIMAP_VIEW_DISTANCE 10
 # define DOOR_CLOSE_DELAY 2.0
-# define DOOR_SPEED 1.0
-# define DOOR_DT_CAP 0.03
+# define DOOR_SPEED_OPEN 3.0
+# define DOOR_SPEED_CLOSE 2.0
+# define DOOR_DT_CAP 0.02
+# define DOOR_OPEN_EPS 0.99
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -179,6 +181,7 @@ typedef struct s_game
 	t_texture	door_tex;
 	double		**door_prog;
 	char		**door_target;
+	char		**door_mask;
 	double		door_last_ts;
 	double		door_last_interact;
 	t_ray		ray;
@@ -300,5 +303,17 @@ void		update_doors(t_game *game);
 void		set_door_target(t_game *game, int x, int y, int opening);
 
 double		now_seconds(void);
+
+int			bg_color_from_ray(t_game *game, t_ray *r, int y);
+void		advance_to_next_wall(t_game *game, t_ray *r);
+
+int			compute_tex_y(t_game *game, t_ray *r, t_texture *t, int y);
+int			sample_wall_color(t_game *game, t_ray *r, t_texture *t, int tex_y);
+void		update_auto_close_targets(t_game *game);
+
+void		alloc_door_arrays(t_game *game);
+void		init_door_rows(t_game *game);
+void		update_door_cell(t_game *game, int x, int y, double dt);
+void		process_cell(t_game *game, int x, int y, double dt);
 
 #endif
