@@ -50,7 +50,8 @@ void	cast_ray(t_game *game, int x)
 	init_ray(game, &ray, x);
 	calculate_step_and_side_dist(game, &ray);
 	perform_dda(game, &ray);
-	calculate_wall_distance(game, &ray);
+	calculate_perp_wall_dist(game, &ray);
+	calculate_line_height_and_draw_range(game, &ray);
 	draw_textured_wall(game, &ray, x);
 }
 

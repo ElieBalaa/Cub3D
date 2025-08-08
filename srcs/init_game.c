@@ -35,12 +35,6 @@ int	init_mlx(t_game *game)
 
 int	init_player(t_game *game)
 {
-	game->player.pos.x = 25 * MAP_SCALE + MAP_SCALE / 2;
-	game->player.pos.y = 11 * MAP_SCALE + MAP_SCALE / 2;
-	game->player.dir.x = 0.0;
-	game->player.dir.y = -1.0;
-	game->player.plane.x = 0.66;
-	game->player.plane.y = 0.0;
 	game->player.move_speed = MOVE_SPEED;
 	game->player.rot_speed = ROT_SPEED;
 	return (0);

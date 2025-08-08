@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_helpers.c                                      :+:      :+:    :+:   */
+/*   bonus_stubs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omar-iskandarani <omar-iskandarani@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,30 +12,32 @@
 
 #include "../includes/cub3d.h"
 
-void	handle_texture_path(char *line, char *prefix, char **texture_ptr)
+void	draw_minimap(t_game *game)
 {
-	char	*texture_path;
-
-	texture_path = trim_spaces(line + ft_strlen(prefix));
-	*texture_ptr = texture_path;
+	(void)game;
 }
 
-void	handle_color(char *line, char *prefix, int *color_ptr)
+int	check_collision(t_game *game, double x, double y)
 {
-	char	*color_str;
-
-	color_str = trim_spaces(line + ft_strlen(prefix));
-	*color_ptr = validate_color(color_str, prefix);
+	(void)game;
+	(void)x;
+	(void)y;
+	return (0);
 }
 
-void	free_textures(t_game *game)
+void	destroy_window_and_image(t_game *game)
 {
-	if (game->map.north_texture)
-		free(game->map.north_texture);
-	if (game->map.south_texture)
-		free(game->map.south_texture);
-	if (game->map.west_texture)
-		free(game->map.west_texture);
-	if (game->map.east_texture)
-		free(game->map.east_texture);
+	(void)game;
+}
+
+void	create_new_window_and_image(t_game *game, int new_width, int new_height)
+{
+	(void)game;
+	(void)new_width;
+	(void)new_height;
+}
+
+void	register_event_handlers(t_game *game)
+{
+	(void)game;
 }

@@ -193,6 +193,12 @@ int			init_map(t_game *game);
 int			load_texture(t_game *game, t_texture *texture, char *path);
 int			load_textures(t_game *game);
 void		cleanup_game(t_game *game);
+int			set_player_position(t_game *game);
+void		set_player_direction(t_game *game, char spawn_char);
+void		set_player_direction_north(t_game *game);
+void		set_player_direction_south(t_game *game);
+void		set_player_direction_east(t_game *game);
+void		set_player_direction_west(t_game *game);
 
 /* Map parsing */
 int			parse_map_file(char *filename, t_game *game);
@@ -207,6 +213,14 @@ void		free_textures(t_game *game);
 int			count_map_lines(char *filename);
 void		handle_texture_path(char *line, char *prefix, char **texture_ptr);
 void		handle_color(char *line, char *prefix, int *color_ptr);
+int			validate_map(t_game *game);
+int			is_valid_map_char(char c);
+int			check_map_characters(t_game *game);
+int			count_player_spawns(t_game *game);
+int			check_border_position(t_game *game, int i, int j);
+int			check_adjacent_spaces(t_game *game, int i, int j);
+int			validate_textures(t_game *game);
+int			validate_color(char *color_str, char *color_name);
 
 /* Game loop */
 int			game_loop(t_game *game);
