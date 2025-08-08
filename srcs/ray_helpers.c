@@ -21,14 +21,17 @@ void	draw_wall_slice_wall(t_game *game, t_ray *ray, int x, int y)
 {
 	int			tex_y;
 	int			color;
-	double		step;
-	double		tex_pos;
+	int			d;
 	t_texture	*texture;
 
 	texture = get_wall_texture(game, ray);
-	step = 1.0 * texture->height / ray->line_height;
-	tex_pos = (y - ray->draw_start) * step;
-	tex_y = (int)tex_pos & (texture->height - 1);
+	d = y * 256 - game->mlx.current_height * 128
+		+ ray->line_height * 128;
+	tex_y = ((d * texture->height) / ray->line_height) / 256;
+	if (tex_y < 0)
+		tex_y = 0;
+	if (tex_y >= texture->height)
+		tex_y = texture->height - 1;
 	color = get_texture_color(texture, ray->tex_x, tex_y);
 	if (ray->side == 1)
 		color = (color >> 1) & 8355711;
