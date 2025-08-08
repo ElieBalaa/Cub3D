@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   doors_bonus.c                                      :+:      :+:    :+:   */
+/*   doors_stubs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omar-iskandarani <omar-iskandarani@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,37 +12,26 @@
 
 #include "../includes/cub3d.h"
 
-static int	is_inside(t_game *game, int x, int y)
-{
-	if (y < 0 || y >= game->map.height)
-		return (0);
-	if (x < 0 || x >= (int)ft_strlen(game->map.grid[y]))
-		return (0);
-	return (1);
-}
-
-static int	front_cell(t_game *game, int *mx, int *my)
-{
-	double	fx;
-	double	fy;
-
-	fx = game->player.pos.x / MAP_SCALE + game->player.dir.x;
-	fy = game->player.pos.y / MAP_SCALE + game->player.dir.y;
-	*mx = (int)fx;
-	*my = (int)fy;
-	return (is_inside(game, *mx, *my));
-}
-
 void	try_toggle_door(t_game *game)
 {
-	int	mx;
-	int	my;
-
-	if (!front_cell(game, &mx, &my))
-		return ;
-	if (game->map.grid[my][mx] == 'D')
-		set_door_target(game, mx, my, 1);
-	else if (game->map.grid[my][mx] == 'O')
-		set_door_target(game, mx, my, 0);
-	game->door_last_interact = now_seconds();
+	(void)game;
 }
+
+int		init_doors_anim(t_game *game)
+{
+	(void)game;
+	return (0);
+}
+
+void	update_doors(t_game *game)
+{
+	(void)game;
+}
+
+void	set_door_target(t_game *game, int x, int y, int opening)
+{
+	(void)game;
+	(void)x;
+	(void)y;
+	(void)opening;
+} 

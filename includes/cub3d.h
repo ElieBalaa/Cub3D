@@ -38,6 +38,9 @@
 # define MINIMAP_MARGIN 20
 # define MINIMAP_RADIUS 70
 # define MINIMAP_VIEW_DISTANCE 10
+# define DOOR_CLOSE_DELAY 2.0
+# define DOOR_SPEED 1.0
+# define DOOR_DT_CAP 0.03
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -177,6 +180,7 @@ typedef struct s_game
 	double		**door_prog;
 	char		**door_target;
 	double		door_last_ts;
+	double		door_last_interact;
 	t_ray		ray;
 	t_keys		keys;
 	int			fullscreen;
@@ -295,5 +299,6 @@ int			init_doors_anim(t_game *game);
 void		update_doors(t_game *game);
 void		set_door_target(t_game *game, int x, int y, int opening);
 
+double		now_seconds(void);
 
 #endif

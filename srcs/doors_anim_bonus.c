@@ -13,7 +13,7 @@
 #include "../includes/cub3d.h"
 #include <sys/time.h>
 
-static double	now_seconds(void)
+double	now_seconds(void)
 {
 	struct timeval	v;
 
@@ -103,8 +103,27 @@ void	update_doors(t_game *game)
 
 	now = now_seconds();
 	dt = now - game->door_last_ts;
+	if (dt > DOOR_DT_CAP)
+		dt = DOOR_DT_CAP;
 	game->door_last_ts = now;
-	speed = 2.0;
+	speed = DOOR_SPEED;
+	if (now - game->door_last_interact > DOOR_CLOSE_DELAY)
+	{
+		y = 0;
+		while (game->map.grid[y])
+		{
+			int x;
+
+			x = 0;
+			while (x < (int)ft_strlen(game->map.grid[y]))
+			{
+				if (game->map.grid[y][x] == 'O')
+					game->door_target[y][x] = 0;
+				x++;
+			}
+			y++;
+		}
+	}
 	y = 0;
 	while (game->map.grid[y])
 	{

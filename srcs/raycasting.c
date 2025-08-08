@@ -20,8 +20,12 @@ void	draw_floor_pixel(t_game *game, int x, int y)
 void	draw_textured_wall(t_game *game, t_ray *ray, int x)
 {
 	t_texture	*texture;
+	char		cell;
 
 	texture = get_wall_texture(game, ray);
+	cell = game->map.grid[(int)ray->map.y][(int)ray->map.x];
+	if (cell == 'D')
+		texture = &game->door_tex;
 	calculate_wall_texture_coords(game, ray, texture);
 	draw_wall_slice(game, ray, x, texture);
 }
