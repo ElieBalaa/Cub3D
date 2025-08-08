@@ -43,22 +43,6 @@ void	calculate_line_height_and_draw_range(t_game *game, t_ray *ray)
 		ray->draw_end = game->mlx.current_height - 1;
 }
 
-void	calculate_floor_coords(t_game *game, int x, int y, double *floor_x)
-{
-	double	row_distance;
-	double	camera_x;
-	double	floor_y;
-
-	camera_x = 2 * x / (double)game->mlx.current_width - 1;
-	row_distance = (double)game->mlx.current_height / (2.0 * y
-			- game->mlx.current_height);
-	*floor_x = game->player.pos.x / MAP_SCALE + row_distance
-		* (game->player.dir.x + game->player.plane.x * camera_x);
-	floor_y = game->player.pos.y / MAP_SCALE + row_distance
-		* (game->player.dir.y + game->player.plane.y * camera_x);
-	*(floor_x + 1) = floor_y;
-}
-
 void	calculate_wall_texture_coords(t_game *game,
 			t_ray *ray, t_texture *texture)
 {

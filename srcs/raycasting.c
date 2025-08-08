@@ -14,24 +14,7 @@
 
 void	draw_floor_pixel(t_game *game, int x, int y)
 {
-	double	floor_x;
-	double	floor_y;
-	int		tex_x;
-	int		tex_y;
-	int		color;
-
-	calculate_floor_coords(game, x, y, &floor_x);
-	floor_y = *(double *)(&floor_x + 1);
-	tex_x = (int)(floor_x * game->floor_texture.width)
-		% game->floor_texture.width;
-	tex_y = (int)(floor_y * game->floor_texture.height)
-		% game->floor_texture.height;
-	if (tex_x < 0)
-		tex_x += game->floor_texture.width;
-	if (tex_y < 0)
-		tex_y += game->floor_texture.height;
-	color = get_texture_color(&game->floor_texture, tex_x, tex_y);
-	put_pixel(game, x, y, color);
+	put_pixel(game, x, y, game->map.floor_color);
 }
 
 void	draw_textured_wall(t_game *game, t_ray *ray, int x)

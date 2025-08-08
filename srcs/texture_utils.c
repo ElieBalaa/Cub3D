@@ -49,7 +49,5 @@ int	load_textures(t_game *game)
 		return (1);
 	if (load_texture(game, &game->textures[3], game->map.east_texture))
 		return (1);
-	if (load_texture(game, &game->floor_texture, "./textures/floor/floor.xpm"))
-		return (1);
 	return (0);
 }
