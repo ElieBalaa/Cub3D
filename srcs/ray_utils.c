@@ -80,7 +80,8 @@ void	perform_dda(t_game *game, t_ray *ray)
 			|| (int)ray->map.x < 0 || (int)ray->map.x >= (int)ft_strlen(
 				game->map.grid[(int)ray->map.y]))
 			ray->hit = 1;
-		else if (game->map.grid[(int)ray->map.y][(int)ray->map.x] == '1')
+		else if (game->map.grid[(int)ray->map.y][(int)ray->map.x] == '1'
+			|| game->map.grid[(int)ray->map.y][(int)ray->map.x] == 'D')
 			ray->hit = 1;
 	}
 }

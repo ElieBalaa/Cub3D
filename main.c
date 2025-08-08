@@ -32,6 +32,8 @@ int	main(int argc, char **argv)
 		return (1);
 	if (load_textures(&game) != 0)
 		return (exit_error("Error: Failed to load textures"));
+	if (init_doors_anim(&game) != 0)
+		return (exit_error("Error: Failed to init doors"));
 	mlx_hook(game.mlx.win_ptr, 2, 1L << 0, handle_key_press, &game);
 	mlx_hook(game.mlx.win_ptr, 3, 1L << 1, handle_key_release, &game);
 	mlx_hook(game.mlx.win_ptr, 17, 1L << 17, close_game, &game);

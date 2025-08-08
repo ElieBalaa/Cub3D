@@ -39,6 +39,8 @@ int	handle_key_press(int keycode, t_game *game)
 		game->keys.shift = 1;
 	if (keycode == KEY_F)
 		toggle_fullscreen(game);
+	if (keycode == KEY_E)
+		try_toggle_door(game);
 	return (0);
 }
 
@@ -86,6 +88,7 @@ int	game_loop(t_game *game)
 {
 	process_movement(game);
 	process_rotation(game);
+	update_doors(game);
 	clear_screen(game, COLOR_BLACK);
 	render_3d_view(game);
 	draw_minimap(game);

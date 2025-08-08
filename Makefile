@@ -30,7 +30,9 @@ MANDATORY_SRC = main.c \
 BONUS_SRC = srcs/collision.c \
 	srcs/minimap.c \
 	srcs/minimap_utils.c \
-	srcs/window_utils.c
+	srcs/window_utils.c \
+	srcs/doors_bonus.c \
+	srcs/doors_anim_bonus.c
 
 # All sources for bonus (without stubs)
 BONUS_ALL_SRC = $(MANDATORY_SRC) $(BONUS_SRC)

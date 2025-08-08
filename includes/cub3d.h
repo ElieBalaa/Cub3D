@@ -53,6 +53,7 @@
 # define KEY_ESC 65307
 # define KEY_SHIFT 65505
 # define KEY_F 102
+# define KEY_E 101
 
 /* Colors */
 # define COLOR_RED 0xFF0000
@@ -172,6 +173,10 @@ typedef struct s_game
 	t_player	player;
 	t_map		map;
 	t_texture	textures[4];
+	t_texture	door_tex;
+	double		**door_prog;
+	char		**door_target;
+	double		door_last_ts;
 	t_ray		ray;
 	t_keys		keys;
 	int			fullscreen;
@@ -283,5 +288,12 @@ void		calculate_line_height_and_draw_range(t_game *game, t_ray *ray);
 t_texture	*get_wall_texture(t_game *game, t_ray *ray);
 void		calculate_wall_texture_coords(t_game *game, t_ray *ray,
 				t_texture *texture);
+
+/* Bonus doors */
+void		try_toggle_door(t_game *game);
+int			init_doors_anim(t_game *game);
+void		update_doors(t_game *game);
+void		set_door_target(t_game *game, int x, int y, int opening);
+
 
 #endif
