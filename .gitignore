@@ -61,4 +61,7 @@ valgrind-out.txt
 # Archive files in root (these should not be in the repo)
 ../*.zip
 ../*.tgz
-../*.pdf 
+../*.pdf
+
+# Docs to ignore
+LEBANESE_MILITARY_THEME.md 
