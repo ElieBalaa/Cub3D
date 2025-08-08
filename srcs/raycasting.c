@@ -17,15 +17,31 @@ void	draw_floor_pixel(t_game *game, int x, int y)
 	put_pixel(game, x, y, game->map.floor_color);
 }
 
+static int	in_bounds_cell(t_game *g, int mx, int my)
+{
+	if (my < 0 || my >= g->map.height)
+		return (0);
+	if (mx < 0 || mx >= (int)ft_strlen(g->map.grid[my]))
+		return (0);
+	return (1);
+}
+
 void	draw_textured_wall(t_game *game, t_ray *ray, int x)
 {
 	t_texture	*texture;
 	char		cell;
+	int			mx;
+	int			my;
 
 	texture = get_wall_texture(game, ray);
-	cell = game->map.grid[(int)ray->map.y][(int)ray->map.x];
-	if (cell == 'D')
-		texture = &game->door_tex;
+	mx = (int)ray->map.x;
+	my = (int)ray->map.y;
+	if (in_bounds_cell(game, mx, my))
+	{
+		cell = game->map.grid[my][mx];
+		if (cell == 'D')
+			texture = &game->door_tex;
+	}
 	calculate_wall_texture_coords(game, ray, texture);
 	draw_wall_slice(game, ray, x, texture);
 }

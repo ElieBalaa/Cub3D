@@ -26,14 +26,18 @@ void	calculate_perp_wall_dist(t_game *game, t_ray *ray)
 {
 	if (ray->side == 0)
 		ray->perp_wall_dist = (ray->map.x - game->player.pos.x / MAP_SCALE
-				+ (1 - ray->step.x) / 2) / ray->dir.x;
+			+ (1 - ray->step.x) / 2) / (ray->dir.x == 0 ? 1e-6 : ray->dir.x);
 	else
 		ray->perp_wall_dist = (ray->map.y - game->player.pos.y / MAP_SCALE
-				+ (1 - ray->step.y) / 2) / ray->dir.y;
+			+ (1 - ray->step.y) / 2) / (ray->dir.y == 0 ? 1e-6 : ray->dir.y);
+	if (ray->perp_wall_dist < 1e-6)
+		ray->perp_wall_dist = 1e-6;
 }
 
 void	calculate_line_height_and_draw_range(t_game *game, t_ray *ray)
 {
+	if (ray->perp_wall_dist < 1e-6)
+		ray->perp_wall_dist = 1e-6;
 	ray->line_height = (int)(game->mlx.current_height / ray->perp_wall_dist);
 	ray->draw_start = -ray->line_height / 2 + game->mlx.current_height / 2;
 	if (ray->draw_start < 0)

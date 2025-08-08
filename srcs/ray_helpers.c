@@ -26,6 +26,15 @@ static int	background_color_at(t_game *g, t_ray *hit, int y)
 	return (bg_color_from_ray(g, &cpy, y));
 }
 
+static int	in_bounds_cell(t_game *g, int mx, int my)
+{
+	if (my < 0 || my >= g->map.height)
+		return (0);
+	if (mx < 0 || mx >= (int)ft_strlen(g->map.grid[my]))
+		return (0);
+	return (1);
+}
+
 void	draw_wall_slice_wall(t_game *game, t_ray *ray, int x, int y)
 {
 	int			tex_y;
@@ -33,7 +42,8 @@ void	draw_wall_slice_wall(t_game *game, t_ray *ray, int x, int y)
 	t_texture	*texture;
 
 	texture = get_wall_texture(game, ray);
-	if (game->map.grid[(int)ray->map.y][(int)ray->map.x] == 'D')
+	if (in_bounds_cell(game, (int)ray->map.x, (int)ray->map.y)
+		&& game->map.grid[(int)ray->map.y][(int)ray->map.x] == 'D')
 		texture = &game->door_tex;
 	tex_y = compute_tex_y(game, ray, texture, y);
 	color = sample_wall_color(game, ray, texture, tex_y);

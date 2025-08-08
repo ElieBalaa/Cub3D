@@ -25,6 +25,8 @@ static int	sample_door_color(t_game *g, t_ray *r, t_texture *t, int tex_y)
 	double	p;
 	int		off;
 
+	if (g->door_prog == NULL || g->door_mask == NULL)
+		return (get_texture_color(t, r->tex_x, tex_y));
 	p = g->door_prog[(int)r->map.y][(int)r->map.x];
 	off = (int)(p * t->width);
 	tex_x = r->tex_x;
@@ -47,7 +49,7 @@ static int	sample_door_color(t_game *g, t_ray *r, t_texture *t, int tex_y)
 	return (get_texture_color(t, tex_x, tex_y));
 }
 
-int	compute_tex_y(t_game *g, t_ray *r, t_texture *t, int y)
+int			compute_tex_y(t_game *g, t_ray *r, t_texture *t, int y)
 {
 	int	d;
 	int	tex_y;
@@ -61,7 +63,7 @@ int	compute_tex_y(t_game *g, t_ray *r, t_texture *t, int y)
 	return (tex_y);
 }
 
-int	sample_wall_color(t_game *g, t_ray *r, t_texture *t, int tex_y)
+int			sample_wall_color(t_game *g, t_ray *r, t_texture *t, int tex_y)
 {
 	if (is_door_texture(g, t))
 		return (sample_door_color(g, r, t, tex_y));

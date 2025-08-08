@@ -66,6 +66,11 @@ int	init_game(t_game *game)
 	game->keys.right = 0;
 	game->keys.shift = 0;
 	game->fullscreen = 0;
+	game->door_prog = NULL;
+	game->door_target = NULL;
+	game->door_mask = NULL;
+	game->door_last_ts = 0.0;
+	game->door_last_interact = 0.0;
 	return (0);
 }
 
