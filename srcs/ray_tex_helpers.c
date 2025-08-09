@@ -19,43 +19,22 @@ static int	is_door_texture(t_game *g, t_texture *t)
 	return (0);
 }
 
-static int	sample_door_color(t_game *g, t_ray *r, t_texture *t, int tex_y)
-{
-	int		tex_x;
-	double	p;
-	int		off;
-
-	if (g->door_prog == NULL || g->door_mask == NULL)
-		return (get_texture_color(t, r->tex_x, tex_y));
-	p = g->door_prog[(int)r->map.y][(int)r->map.x];
-	off = (int)(p * t->width);
-	tex_x = r->tex_x;
-	if (r->side == 0)
-	{
-		if (r->dir.x > 0)
-			tex_x += off;
-		else
-			tex_x -= off;
-	}
-	else
-	{
-		if (r->dir.y > 0)
-			tex_x += off;
-		else
-			tex_x -= off;
-	}
-	if (tex_x < 0 || tex_x >= t->width)
-		return (-1);
-	return (get_texture_color(t, tex_x, tex_y));
-}
-
-int			compute_tex_y(t_game *g, t_ray *r, t_texture *t, int y)
+static int	compute_tex_y_core(int win_h, int line_h, int y, int tex_h)
 {
 	int	d;
+	int	ty;
+
+	d = y * 256 - win_h * 128 + line_h * 128;
+	ty = ((d * tex_h) / line_h) / 256;
+	return (ty);
+}
+
+int	compute_tex_y(t_game *g, t_ray *r, t_texture *t, int y)
+{
 	int	tex_y;
 
-	d = y * 256 - g->mlx.current_height * 128 + r->line_height * 128;
-	tex_y = ((d * t->height) / r->line_height) / 256;
+	tex_y = compute_tex_y_core(g->mlx.current_height, r->line_height, y,
+			t->height);
 	if (tex_y < 0)
 		tex_y = 0;
 	if (tex_y >= t->height)
@@ -63,7 +42,7 @@ int			compute_tex_y(t_game *g, t_ray *r, t_texture *t, int y)
 	return (tex_y);
 }
 
-int			sample_wall_color(t_game *g, t_ray *r, t_texture *t, int tex_y)
+int	sample_wall_color(t_game *g, t_ray *r, t_texture *t, int tex_y)
 {
 	if (is_door_texture(g, t))
 		return (sample_door_color(g, r, t, tex_y));

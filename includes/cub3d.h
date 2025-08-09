@@ -309,6 +309,7 @@ void		advance_to_next_wall(t_game *game, t_ray *r);
 
 int			compute_tex_y(t_game *game, t_ray *r, t_texture *t, int y);
 int			sample_wall_color(t_game *game, t_ray *r, t_texture *t, int tex_y);
+int			sample_door_color(t_game *game, t_ray *r, t_texture *t, int tex_y);
 void		update_auto_close_targets(t_game *game);
 
 void		alloc_door_arrays(t_game *game);

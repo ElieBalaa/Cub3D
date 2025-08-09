@@ -24,6 +24,7 @@ MANDATORY_SRC = main.c \
 	srcs/ray_helpers.c \
 	srcs/ray_helpers_bg.c \
 	srcs/ray_tex_helpers.c \
+	srcs/door_tex_helpers.c \
 	srcs/ray_calculation.c \
 	srcs/mandatory_stubs.c \
 	srcs/bonus_stubs.c \

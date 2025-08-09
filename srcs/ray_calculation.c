@@ -24,12 +24,25 @@ void	calculate_wall_distance(t_game *game, t_ray *ray)
 
 void	calculate_perp_wall_dist(t_game *game, t_ray *ray)
 {
+	double	dx;
+	double	dy;
+
 	if (ray->side == 0)
-		ray->perp_wall_dist = (ray->map.x - game->player.pos.x / MAP_SCALE
-			+ (1 - ray->step.x) / 2) / (ray->dir.x == 0 ? 1e-6 : ray->dir.x);
+	{
+		dx = ray->dir.x;
+		if (dx == 0)
+			dx = 1e-6;
+		ray->perp_wall_dist = (ray->map.x - game->player.pos.x / MAP_SCALE)
+			/ dx + (1 - ray->step.x) / 2 / dx;
+	}
 	else
-		ray->perp_wall_dist = (ray->map.y - game->player.pos.y / MAP_SCALE
-			+ (1 - ray->step.y) / 2) / (ray->dir.y == 0 ? 1e-6 : ray->dir.y);
+	{
+		dy = ray->dir.y;
+		if (dy == 0)
+			dy = 1e-6;
+		ray->perp_wall_dist = (ray->map.y - game->player.pos.y / MAP_SCALE)
+			/ dy + (1 - ray->step.y) / 2 / dy;
+	}
 	if (ray->perp_wall_dist < 1e-6)
 		ray->perp_wall_dist = 1e-6;
 }
