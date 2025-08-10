@@ -71,7 +71,7 @@ static int	bg_color_from_ray_bg(t_game *g, t_ray *r, int y)
 	return (col);
 }
 
-int		bg_color_from_ray(t_game *g, t_ray *r, int y)
+int	bg_color_from_ray(t_game *g, t_ray *r, int y)
 {
 	return (bg_color_from_ray_bg(g, r, y));
 }

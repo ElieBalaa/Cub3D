@@ -19,7 +19,7 @@ void	draw_map_cell(t_game *game, int x, int y)
 	(void)y;
 }
 
-int		check_collision(t_game *game, double x, double y)
+int	check_collision(t_game *game, double x, double y)
 {
 	(void)game;
 	(void)x;
@@ -33,7 +33,7 @@ void	draw_floor_tex_pixel(t_game *game, t_ray *ray, int x, int y)
 	put_pixel(game, x, y, game->map.floor_color);
 }
 
-int		sample_floor_color_at(t_game *game, t_ray *ray, int y)
+int	sample_floor_color_at(t_game *game, t_ray *ray, int y)
 {
 	(void)ray;
 	(void)y;

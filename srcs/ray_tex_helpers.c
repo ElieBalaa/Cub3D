@@ -32,8 +32,12 @@ static int	compute_tex_y_core(int win_h, int line_h, int y, int tex_h)
 int	compute_tex_y(t_game *g, t_ray *r, t_texture *t, int y)
 {
 	int	tex_y;
+	int	lh;
 
-	tex_y = compute_tex_y_core(g->mlx.current_height, r->line_height, y,
+	lh = r->line_height;
+	if (lh < 1)
+		lh = 1;
+	tex_y = compute_tex_y_core(g->mlx.current_height, lh, y,
 			t->height);
 	if (tex_y < 0)
 		tex_y = 0;

@@ -179,9 +179,11 @@ typedef struct s_game
 	t_map		map;
 	t_texture	textures[4];
 	t_texture	door_tex;
+	t_texture	floor_tex;
 	double		**door_prog;
 	char		**door_target;
 	char		**door_mask;
+	double		**door_open_time;
 	double		door_last_ts;
 	double		door_last_interact;
 	t_ray		ray;
@@ -316,5 +318,8 @@ void		alloc_door_arrays(t_game *game);
 void		init_door_rows(t_game *game);
 void		update_door_cell(t_game *game, int x, int y, double dt);
 void		process_cell(t_game *game, int x, int y, double dt);
+
+void		draw_floor_tex_pixel(t_game *game, t_ray *ray, int x, int y);
+int			sample_floor_color_at(t_game *game, t_ray *ray, int y);
 
 #endif

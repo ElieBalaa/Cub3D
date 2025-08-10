@@ -71,7 +71,7 @@ void	draw_wall_slice(t_game *game, t_ray *ray, int x, t_texture *texture)
 		else if (y >= ray->draw_start && y <= ray->draw_end)
 			draw_wall_slice_wall(game, ray, x, y);
 		else
-			draw_floor_pixel(game, x, y);
+			draw_floor_tex_pixel(game, ray, x, y);
 		y++;
 	}
 }

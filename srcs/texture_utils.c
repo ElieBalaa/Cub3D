@@ -51,5 +51,7 @@ int	load_textures(t_game *game)
 		return (1);
 	if (load_texture(game, &game->door_tex, "./textures/door/door.xpm"))
 		return (1);
+	if (load_texture(game, &game->floor_tex, "./textures/floor/floor.xpm"))
+		return (1);
 	return (0);
 }
