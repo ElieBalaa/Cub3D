@@ -37,6 +37,7 @@ Example:
 - F: Toggle fullscreen
 - ESC or window close: Quit
 - E: Interact (doors) — bonus only
+- Mouse (bonus): Look around
 
 ## Features
 
@@ -58,6 +59,10 @@ Example:
   - Auto-close after a delay unless the player is inside the door cell.
   - Proper background visibility during opening via continued DDA behind doors.
 - Door collisions: closed doors block, open doors are passable.
+- Textured floor rendering and correct floor sampling visible behind opening doors.
+- First-person weapon overlay (`textures/weapon/weapon.xpm`) drawn at the bottom.
+- Mouse look with recentring cursor for continuous rotation.
+- HUD hint: shows "Press E to open the Door" when the player is adjacent to a door.
 - Minimap and other extras (when enabled in your repo).
 
 ## Map Format (.cub)

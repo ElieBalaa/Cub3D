@@ -28,6 +28,7 @@ MANDATORY_SRC = main.c \
 	srcs/ray_calculation.c \
 	srcs/mandatory_stubs.c \
 	srcs/bonus_stubs.c \
+	srcs/bonus_stubs2.c \
 	srcs/doors_stubs.c
 
 # Bonus sources (additional to mandatory)
@@ -46,6 +47,7 @@ BONUS_SRC = srcs/collision.c \
 BONUS_ALL_SRC = $(MANDATORY_SRC) $(BONUS_SRC)
 BONUS_ALL_SRC := $(filter-out srcs/mandatory_stubs.c, $(BONUS_ALL_SRC))
 BONUS_ALL_SRC := $(filter-out srcs/bonus_stubs.c, $(BONUS_ALL_SRC))
+BONUS_ALL_SRC := $(filter-out srcs/bonus_stubs2.c, $(BONUS_ALL_SRC))
 BONUS_ALL_SRC := $(filter-out srcs/doors_stubs.c, $(BONUS_ALL_SRC))
 
 # Object directories
