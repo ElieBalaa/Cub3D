@@ -32,5 +32,7 @@ void	create_new_window_and_image(t_game *game,
 
 void	register_event_handlers(t_game *game)
 {
-	(void)game;
+	mlx_hook(game->mlx.win_ptr, 2, 1L << 0, handle_key_press, game);
+	mlx_hook(game->mlx.win_ptr, 3, 1L << 1, handle_key_release, game);
+	mlx_hook(game->mlx.win_ptr, 17, 1L << 17, close_game, game);
 }

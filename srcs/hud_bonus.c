@@ -55,3 +55,42 @@ void	draw_weapon_hud(t_game *game)
 		src_y++;
 	}
 }
+
+static int	nearby_door_cell(t_game *g)
+{
+	int		mx;
+	int		my;
+	int		dx;
+	int		dy;
+
+	mx = (int)(g->player.pos.x / MAP_SCALE);
+	my = (int)(g->player.pos.y / MAP_SCALE);
+	dy = -1;
+	while (dy <= 1)
+	{
+		dx = -1;
+		while (dx <= 1)
+		{
+			if (my + dy >= 0 && my + dy < g->map.height && mx + dx >= 0
+				&& mx + dx < (int)ft_strlen(g->map.grid[my + dy])
+				&& g->map.grid[my + dy][mx + dx] == 'D')
+				return (1);
+			dx++;
+		}
+		dy++;
+	}
+	return (0);
+}
+
+void	draw_press_e_hint(t_game *game)
+{
+	int		x;
+	int		y;
+
+	if (!nearby_door_cell(game))
+		return ;
+	x = (game->mlx.current_width / 2) - 140;
+	y = game->mlx.current_height - 40;
+	mlx_string_put(game->mlx.mlx_ptr, game->mlx.win_ptr, x, y,
+		COLOR_WHITE, "Press E to open the Door");
+}

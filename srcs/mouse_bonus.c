@@ -33,13 +33,20 @@ static void	apply_rotation_by_delta(t_game *g, double delta)
 
 int	handle_mouse_move(int x, int y, t_game *game)
 {
-	int		cx;
-	int		cy;
-	int		dx;
+	static int	initialized = 0;
+	int			cx;
+	int			cy;
+	int			dx;
 
 	(void)y;
 	cx = game->mlx.current_width / 2;
 	cy = game->mlx.current_height / 2;
+	if (!initialized)
+	{
+		mlx_mouse_move(game->mlx.mlx_ptr, game->mlx.win_ptr, cx, cy);
+		initialized = 1;
+		return (0);
+	}
 	dx = x - cx;
 	if (dx != 0)
 		apply_rotation_by_delta(game, (double)dx);
