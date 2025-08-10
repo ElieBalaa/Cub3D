@@ -49,7 +49,7 @@ void	calculate_movement(t_game *game, double *move_x, double *move_y)
 	*move_x = 0;
 	*move_y = 0;
 	if (game->keys.shift)
-		current_speed = 4.0;
+		current_speed = 8.0;
 	else
 		current_speed = game->player.move_speed;
 	apply_forward_backward(game, move_x, move_y, current_speed);

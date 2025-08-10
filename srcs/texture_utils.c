@@ -49,9 +49,9 @@ int	load_textures(t_game *game)
 		return (1);
 	if (load_texture(game, &game->textures[3], game->map.east_texture))
 		return (1);
-	if (load_texture(game, &game->door_tex, "./textures/door/door.xpm"))
+	if (load_texture(game, &game->door_tex, "./textures/door/door-army.xpm"))
 		return (1);
-	if (load_texture(game, &game->floor_tex, "./textures/floor/floor.xpm"))
+	if (load_texture(game, &game->floor_tex, "./textures/floor/floor_dirt.xpm"))
 		return (1);
 	if (load_texture(game, &game->weapon_tex,
 			"./textures/weapon/weapon.xpm"))

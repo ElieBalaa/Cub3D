@@ -1,7 +1,7 @@
-NO ./textures/walls/wall.xpm
-SO ./textures/walls/wall1.xpm  
-WE ./textures/walls/wall.xpm
-EA ./textures/walls/grey.xpm
+NO ./textures/walls/army-wall.xpm
+SO ./textures/walls/wall1-army.xpm  
+WE ./textures/walls/wall2.xpm
+EA ./textures/walls/wall2.xpm
 
 F 220,100,0
 C 135,206,235
@@ -17,6 +17,6 @@ C 135,206,235
 11000000110101011100000010001
 10000000000000000D000000D0001
 10000000000000001101010010001
-11000001010101011111011110E0111
+11000001010101011111011110N0111
 11110111011101010101111010001
 11111111111111111111111111111 
