@@ -79,18 +79,18 @@
 
 typedef struct s_line
 {
-	int	start_x;
-	int	start_y;
-	int	end_x;
-	int	end_y;
+	int		start_x;
+	int		start_y;
+	int		end_x;
+	int		end_y;
 }	t_line;
 
 typedef struct s_square
 {
-	int	x;
-	int	y;
-	int	size;
-	int	color;
+	int		x;
+	int		y;
+	int		size;
+	int		color;
 }	t_square;
 
 typedef struct s_vector
@@ -110,13 +110,13 @@ typedef struct s_player
 
 typedef struct s_keys
 {
-	int	w;
-	int	a;
-	int	s;
-	int	d;
-	int	left;
-	int	right;
-	int	shift;
+	int		w;
+	int		a;
+	int		s;
+	int		d;
+	int		left;
+	int		right;
+	int		shift;
 }	t_keys;
 
 typedef struct s_texture
@@ -132,15 +132,15 @@ typedef struct s_texture
 
 typedef struct s_map
 {
-	char	**grid;
-	int		width;
-	int		height;
-	char	*north_texture;
-	char	*south_texture;
-	char	*west_texture;
-	char	*east_texture;
-	int		floor_color;
-	int		ceiling_color;
+	char		**grid;
+	int			width;
+	int			height;
+	char		*north_texture;
+	char		*south_texture;
+	char		*west_texture;
+	char		*east_texture;
+	int			floor_color;
+	int			ceiling_color;
 }	t_map;
 
 typedef struct s_mlx
@@ -180,6 +180,7 @@ typedef struct s_game
 	t_texture	textures[4];
 	t_texture	door_tex;
 	t_texture	floor_tex;
+	t_texture	weapon_tex;
 	double		**door_prog;
 	char		**door_target;
 	char		**door_mask;
@@ -321,5 +322,7 @@ void		process_cell(t_game *game, int x, int y, double dt);
 
 void		draw_floor_tex_pixel(t_game *game, t_ray *ray, int x, int y);
 int			sample_floor_color_at(t_game *game, t_ray *ray, int y);
+
+void		draw_weapon_hud(t_game *game);
 
 #endif

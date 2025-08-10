@@ -22,7 +22,8 @@ void	destroy_window_and_image(t_game *game)
 	(void)game;
 }
 
-void	create_new_window_and_image(t_game *game, int new_width, int new_height)
+void	create_new_window_and_image(t_game *game,
+		int new_width, int new_height)
 {
 	(void)game;
 	(void)new_width;
@@ -30,6 +31,11 @@ void	create_new_window_and_image(t_game *game, int new_width, int new_height)
 }
 
 void	register_event_handlers(t_game *game)
+{
+	(void)game;
+}
+
+void	draw_weapon_hud(t_game *game)
 {
 	(void)game;
 }

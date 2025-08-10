@@ -92,6 +92,7 @@ int	game_loop(t_game *game)
 	clear_screen(game, COLOR_BLACK);
 	render_3d_view(game);
 	draw_minimap(game);
+	draw_weapon_hud(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr,
 		game->mlx.img_ptr, 0, 0);
 	return (0);
