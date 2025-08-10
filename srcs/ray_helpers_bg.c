@@ -60,7 +60,7 @@ static int	bg_color_from_ray_bg(t_game *g, t_ray *r, int y)
 	if (y < r->draw_start)
 		return (g->map.ceiling_color);
 	if (y > r->draw_end)
-		return (g->map.floor_color);
+		return (sample_floor_color_at(g, r, y));
 	tx = get_wall_texture(g, r);
 	calculate_wall_texture_coords(g, r, tx);
 	step = 1.0 * tx->height / r->line_height;
@@ -71,7 +71,7 @@ static int	bg_color_from_ray_bg(t_game *g, t_ray *r, int y)
 	return (col);
 }
 
-int	bg_color_from_ray(t_game *g, t_ray *r, int y)
+int		bg_color_from_ray(t_game *g, t_ray *r, int y)
 {
 	return (bg_color_from_ray_bg(g, r, y));
 }
