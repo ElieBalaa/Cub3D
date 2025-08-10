@@ -23,7 +23,7 @@ void	destroy_window_and_image(t_game *game)
 }
 
 void	create_new_window_and_image(t_game *game,
-		int new_width, int new_height)
+			int new_width, int new_height)
 {
 	(void)game;
 	(void)new_width;

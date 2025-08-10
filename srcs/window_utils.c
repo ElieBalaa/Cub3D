@@ -38,4 +38,6 @@ void	register_event_handlers(t_game *game)
 	mlx_hook(game->mlx.win_ptr, 2, 1L << 0, handle_key_press, game);
 	mlx_hook(game->mlx.win_ptr, 3, 1L << 1, handle_key_release, game);
 	mlx_hook(game->mlx.win_ptr, 17, 1L << 17, close_game, game);
+	mlx_hook(game->mlx.win_ptr, 6, 1L << 6, handle_mouse_move, game);
+	mlx_mouse_hide(game->mlx.mlx_ptr, game->mlx.win_ptr);
 }

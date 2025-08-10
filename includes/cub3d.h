@@ -324,5 +324,7 @@ void		draw_floor_tex_pixel(t_game *game, t_ray *ray, int x, int y);
 int			sample_floor_color_at(t_game *game, t_ray *ray, int y);
 
 void		draw_weapon_hud(t_game *game);
+int			handle_mouse_move(int x, int y, t_game *game);
+
 
 #endif
