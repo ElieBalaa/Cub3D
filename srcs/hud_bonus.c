@@ -43,10 +43,12 @@ void	draw_weapon_hud(t_game *game)
 	int		start_x;
 	int		start_y;
 	int		src_y;
+	int		off;
 
 	if (!game->weapon_tex.img)
 		return ;
-	start_x = (game->mlx.current_width - game->weapon_tex.width) / 2;
+	off = game->weapon_tex.width / 10;
+	start_x = (game->mlx.current_width - game->weapon_tex.width) / 2 + off + 15;
 	start_y = game->mlx.current_height - game->weapon_tex.height;
 	src_y = 0;
 	while (src_y < game->weapon_tex.height)
