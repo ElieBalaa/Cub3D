@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: omar-iskandarani <omar-iskandarani@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/08 10:00:00 by omar-iskand       #+#    #+#             */
-/*   Updated: 2025/08/08 10:00:00 by omar-iskand      ###   ########.fr       */
+/*   Created: 2025/08/08 22:10:00 by omar-iskand       #+#    #+#             */
+/*   Updated: 2025/08/08 22:10:00 by omar-iskand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,42 @@
 
 void	alloc_door_arrays(t_game *g)
 {
-	int	h;
+	int		h;
+	int		w;
+	int		y;
 
 	h = g->map.height;
 	g->door_prog = (double **)malloc(sizeof(double *) * h);
 	g->door_target = (char **)malloc(sizeof(char *) * h);
 	g->door_mask = (char **)malloc(sizeof(char *) * h);
-}
-
-static void	init_row_values(t_game *g, int y, int w)
-{
-	int	x;
-
-	x = 0;
-	while (x < w)
+	y = 0;
+	while (y < h)
 	{
-		g->door_mask[y][x] = (g->map.grid[y][x] == 'D'
-				|| g->map.grid[y][x] == 'O');
-		g->door_prog[y][x] = (g->map.grid[y][x] == 'O');
-		g->door_target[y][x] = (g->map.grid[y][x] == 'O');
-		x++;
+		w = (int)ft_strlen(g->map.grid[y]);
+		g->door_prog[y] = (double *)malloc(sizeof(double) * w);
+		g->door_target[y] = (char *)malloc(sizeof(char) * w);
+		g->door_mask[y] = (char *)malloc(sizeof(char) * w);
+		y++;
 	}
 }
 
 void	init_door_rows(t_game *g)
 {
 	int	y;
-	int	w;
+	int	x;
 
 	y = 0;
 	while (g->map.grid[y])
 	{
-		w = ft_strlen(g->map.grid[y]);
-		g->door_prog[y] = (double *)malloc(sizeof(double) * w);
-		g->door_target[y] = (char *)malloc(sizeof(char) * w);
-		g->door_mask[y] = (char *)malloc(sizeof(char) * w);
-		init_row_values(g, y, w);
+		x = 0;
+		while (x < (int)ft_strlen(g->map.grid[y]))
+		{
+			g->door_mask[y][x] = (g->map.grid[y][x] == 'D'
+					|| g->map.grid[y][x] == 'O');
+			g->door_prog[y][x] = (g->map.grid[y][x] == 'O');
+			g->door_target[y][x] = (g->map.grid[y][x] == 'O');
+			x++;
+		}
 		y++;
 	}
 }
@@ -97,6 +97,5 @@ void	process_cell(t_game *g, int x, int y, double dt)
 		g->map.grid[y][x] = 'O';
 		return ;
 	}
-	if (g->map.grid[y][x] != 'O')
-		update_door_cell(g, x, y, dt);
+	update_door_cell(g, x, y, dt);
 }
