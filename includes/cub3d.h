@@ -181,6 +181,7 @@ typedef struct s_game
 	t_texture	door_tex;
 	t_texture	floor_tex;
 	t_texture	weapon_tex;
+	t_texture	dot_tex;
 	double		**door_prog;
 	char		**door_target;
 	char		**door_mask;
@@ -326,5 +327,6 @@ int			sample_floor_color_at(t_game *game, t_ray *ray, int y);
 void		draw_weapon_hud(t_game *game);
 int			handle_mouse_move(int x, int y, t_game *game);
 void		draw_press_e_hint(t_game *game);
+void		draw_crosshair_dot(t_game *game);
 
 #endif

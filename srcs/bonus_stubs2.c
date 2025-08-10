@@ -29,3 +29,8 @@ void	draw_press_e_hint(t_game *game)
 {
 	(void)game;
 }
+
+void	draw_crosshair_dot(t_game *game)
+{
+	(void)game;
+}

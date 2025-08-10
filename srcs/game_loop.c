@@ -65,8 +65,8 @@ int	handle_key_release(int keycode, t_game *game)
 
 void	toggle_fullscreen(t_game *game)
 {
-	int	new_width;
-	int	new_height;
+	int		new_width;
+	int		new_height;
 
 	if (game->fullscreen)
 	{
@@ -93,6 +93,7 @@ int	game_loop(t_game *game)
 	render_3d_view(game);
 	draw_minimap(game);
 	draw_weapon_hud(game);
+	draw_crosshair_dot(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr,
 		game->mlx.img_ptr, 0, 0);
 	draw_press_e_hint(game);

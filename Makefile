@@ -1,4 +1,4 @@
-NAME        = cub3d
+NAME        = cub3D
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror
 
@@ -41,6 +41,7 @@ BONUS_SRC = srcs/collision.c \
 	srcs/doors_anim_utils_bonus.c \
 	srcs/floor_bonus.c \
 	srcs/hud_bonus.c \
+	srcs/hud_crosshair_bonus.c \
 	srcs/mouse_bonus.c
 
 # All sources for bonus (without stubs)

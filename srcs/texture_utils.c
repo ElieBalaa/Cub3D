@@ -53,7 +53,10 @@ int	load_textures(t_game *game)
 		return (1);
 	if (load_texture(game, &game->floor_tex, "./textures/floor/floor.xpm"))
 		return (1);
-	if (load_texture(game, &game->weapon_tex, "./textures/weapon/weapon.xpm"))
+	if (load_texture(game, &game->weapon_tex,
+			"./textures/weapon/weapon.xpm"))
+		return (1);
+	if (load_texture(game, &game->dot_tex, "./textures/weapon/dot.xpm"))
 		return (1);
 	return (0);
 }
