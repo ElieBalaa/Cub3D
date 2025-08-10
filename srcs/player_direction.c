@@ -47,11 +47,11 @@ void	set_player_direction_west(t_game *game)
 void	set_player_direction(t_game *game, char spawn_char)
 {
 	if (spawn_char == 'N')
-		set_player_direction_north(game);
-	else if (spawn_char == 'S')
 		set_player_direction_south(game);
+	else if (spawn_char == 'S')
+		set_player_direction_north(game);
 	else if (spawn_char == 'E')
-		set_player_direction_east(game);
-	else if (spawn_char == 'W')
 		set_player_direction_west(game);
+	else if (spawn_char == 'W')
+		set_player_direction_east(game);
 }
