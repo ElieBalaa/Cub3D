@@ -105,3 +105,8 @@ void			draw_ammo_hud(t_game *g)
 {
 	(void)g;
 }
+
+void			draw_ammo_icon_hud(t_game *g)
+{
+	(void)g;
+}

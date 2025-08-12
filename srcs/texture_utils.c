@@ -65,6 +65,8 @@ static void	load_ui_textures(t_game *game)
 			"./textures/health/game_over.xpm");
 	load_texture(game, &game->ammo_tex,
 			"./textures/weapon/amo.xpm");
+	load_texture(game, &game->numbers_tex,
+			"./textures/screen/numbers.xpm");
 }
 
 int		load_textures(t_game *game)

@@ -200,6 +200,7 @@ typedef struct s_game
 	t_texture	hp_icon;
 	t_texture	medkit_tex;
 	t_texture	ammo_tex;
+	t_texture	numbers_tex;
 	double		**door_prog;
 	char		**door_target;
 	char		**door_mask;
@@ -384,6 +385,7 @@ int				handle_mouse_move(int x, int y, t_game *game);
 void			draw_press_e_hint(t_game *game);
 void			draw_crosshair_dot(t_game *game);
 void			draw_ammo_hud(t_game *game);
+void			draw_ammo_icon_hud(t_game *game);
 void			update_weapon_anim(t_game *game);
 t_texture		*current_weapon_texture(t_game *g);
 int				handle_mouse_press(int button, int x, int y, t_game *game);
