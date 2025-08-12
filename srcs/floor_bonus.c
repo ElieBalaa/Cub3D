@@ -65,14 +65,16 @@ static int	floor_tex_color(t_game *g, double cx, double cy)
 	return (get_texture_color(t, tx, ty));
 }
 
-int	sample_floor_color_at(t_game *g, t_ray *r, int y)
+int			sample_floor_color_at(t_game *g, t_ray *r, int y)
 {
 	double		den;
 	double		w;
 	double		fx;
 	double		fy;
+	int			vy;
 
-	den = (double)(2 * y - g->mlx.current_height);
+	vy = y - g->pitch;
+	den = (double)(2 * vy - g->mlx.current_height);
 	if (den == 0.0)
 		den = 1e-6;
 	if (r->perp_wall_dist < 1e-6)
@@ -85,7 +87,7 @@ int	sample_floor_color_at(t_game *g, t_ray *r, int y)
 	return (floor_tex_color(g, fx, fy));
 }
 
-void	draw_floor_tex_pixel(t_game *g, t_ray *r, int x, int y)
+void			draw_floor_tex_pixel(t_game *g, t_ray *r, int x, int y)
 {
 	int			color;
 

@@ -12,12 +12,12 @@
 
 #include "../includes/cub3d.h"
 
-void	draw_floor_pixel(t_game *game, int x, int y)
+void				draw_floor_pixel(t_game *game, int x, int y)
 {
 	put_pixel(game, x, y, game->map.floor_color);
 }
 
-static int	in_bounds_cell(t_game *g, int mx, int my)
+static int			in_bounds_cell(t_game *g, int mx, int my)
 {
 	if (my < 0 || my >= g->map.height)
 		return (0);
@@ -26,12 +26,12 @@ static int	in_bounds_cell(t_game *g, int mx, int my)
 	return (1);
 }
 
-void	draw_textured_wall(t_game *game, t_ray *ray, int x)
+void				draw_textured_wall(t_game *game, t_ray *ray, int x)
 {
-	t_texture	*texture;
-	char		cell;
-	int			mx;
-	int			my;
+	t_texture		*texture;
+	char			cell;
+	int				mx;
+	int				my;
 
 	texture = get_wall_texture(game, ray);
 	mx = (int)ray->map.x;
@@ -44,11 +44,13 @@ void	draw_textured_wall(t_game *game, t_ray *ray, int x)
 	}
 	calculate_wall_texture_coords(game, ray, texture);
 	draw_wall_slice(game, ray, x, texture);
+	if (game->zbuffer)
+		game->zbuffer[x] = ray->perp_wall_dist;
 }
 
-void	cast_ray(t_game *game, int x)
+void				cast_ray(t_game *game, int x)
 {
-	t_ray	ray;
+	t_ray			ray;
 
 	init_ray(game, &ray, x);
 	calculate_step_and_side_dist(game, &ray);
@@ -58,9 +60,9 @@ void	cast_ray(t_game *game, int x)
 	draw_textured_wall(game, &ray, x);
 }
 
-void	render_3d_view(t_game *game)
+void				render_3d_view(t_game *game)
 {
-	int	x;
+	int				x;
 
 	x = 0;
 	while (x < game->mlx.current_width)

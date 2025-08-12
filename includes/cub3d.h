@@ -43,6 +43,9 @@
 # define DOOR_SPEED_CLOSE 2.0
 # define DOOR_DT_CAP 0.02
 # define DOOR_OPEN_EPS 0.99
+# define PITCH_STEP 10
+# define PITCH_MIN -200
+# define PITCH_MAX 200
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -59,6 +62,8 @@
 # define KEY_SHIFT 65505
 # define KEY_F 102
 # define KEY_E 101
+# define KEY_UP 65362
+# define KEY_DOWN 65364
 
 /* Colors */
 # define COLOR_RED 0xFF0000
@@ -83,7 +88,7 @@ typedef struct s_line
 	int		start_y;
 	int		end_x;
 	int		end_y;
-}	t_line;
+} t_line;
 
 typedef struct s_square
 {
@@ -91,13 +96,13 @@ typedef struct s_square
 	int		y;
 	int		size;
 	int		color;
-}	t_square;
+} t_square;
 
 typedef struct s_vector
 {
 	double	x;
 	double	y;
-}	t_vector;
+} t_vector;
 
 typedef struct s_player
 {
@@ -106,7 +111,7 @@ typedef struct s_player
 	t_vector	plane;
 	double		move_speed;
 	double		rot_speed;
-}	t_player;
+} t_player;
 
 typedef struct s_keys
 {
@@ -117,7 +122,9 @@ typedef struct s_keys
 	int		left;
 	int		right;
 	int		shift;
-}	t_keys;
+	int		up;
+	int		down;
+} t_keys;
 
 typedef struct s_texture
 {
@@ -128,7 +135,7 @@ typedef struct s_texture
 	int		endian;
 	int		width;
 	int		height;
-}	t_texture;
+} t_texture;
 
 typedef struct s_map
 {
@@ -141,7 +148,7 @@ typedef struct s_map
 	char		*east_texture;
 	int			floor_color;
 	int			ceiling_color;
-}	t_map;
+} t_map;
 
 typedef struct s_mlx
 {
@@ -154,7 +161,7 @@ typedef struct s_mlx
 	int		endian;
 	int		current_width;
 	int		current_height;
-}	t_mlx;
+} t_mlx;
 
 typedef struct s_ray
 {
@@ -170,7 +177,7 @@ typedef struct s_ray
 	int			draw_start;
 	int			draw_end;
 	int			tex_x;
-}	t_ray;
+} t_ray;
 
 typedef struct s_game
 {
@@ -181,7 +188,15 @@ typedef struct s_game
 	t_texture	door_tex;
 	t_texture	floor_tex;
 	t_texture	weapon_tex;
+	t_texture	weapon1_tex;
+	t_texture	weapon2_tex;
 	t_texture	dot_tex;
+	t_texture	enemy_tex;
+	t_texture	enemy_shoot_tex;
+	t_texture	hp_bar_bg;
+	t_texture	hp_bar_fill;
+	t_texture	hp_icon;
+	t_texture	medkit_tex;
 	double		**door_prog;
 	char		**door_target;
 	char		**door_mask;
@@ -191,7 +206,23 @@ typedef struct s_game
 	t_ray		ray;
 	t_keys		keys;
 	int			fullscreen;
-}	t_game;
+	int			weapon_anim_phase;
+	double		weapon_anim_started_at;
+	int			pitch;
+	int			spr_count;
+	int			*spr_x;
+	int			*spr_y;
+	double		*zbuffer;
+	int			max_health;
+	int			health;
+	double		last_hit_ts;
+	double		invuln_secs;
+	int			is_dead;
+	double		*spr_last_seen;
+	double		*spr_next_shot;
+	double		*spr_shoot_until;
+	int			*spr_spotted;
+} t_game;
 
 /* Function prototypes */
 int			contains_cub(char *filename);
@@ -242,91 +273,111 @@ int			game_loop(t_game *game);
 int			close_game(t_game *game);
 int			handle_key_press(int keycode, t_game *game);
 int			handle_key_release(int keycode, t_game *game);
-void		toggle_fullscreen(t_game *game);
-void		destroy_window_and_image(t_game *game);
-void		create_new_window_and_image(t_game *game,
+void			toggle_fullscreen(t_game *game);
+void			destroy_window_and_image(t_game *game);
+void			create_new_window_and_image(t_game *game,
 				int new_width, int new_height);
-void		register_event_handlers(t_game *game);
+void			register_event_handlers(t_game *game);
 
 /* Minimap */
-void		draw_minimap(t_game *game);
-void		draw_minimap_background_and_border(t_game *game);
-void		draw_minimap_world_cells(t_game *game);
-void		draw_minimap_cell_at_pos(t_game *game, int world_x, int world_y);
-void		draw_minimap_player_professional(t_game *game);
-void		draw_minimap_border_pixel(t_game *game, int x, int y, int center_x);
+void			draw_minimap(t_game *game);
+void			draw_minimap_background_and_border(t_game *game);
+void			draw_minimap_world_cells(t_game *game);
+void			draw_minimap_cell_at_pos(t_game *game, int world_x, int world_y);
+void			draw_minimap_player_professional(t_game *game);
+void			draw_minimap_border_pixel(t_game *game, int x, int y, int center_x);
 
 /* Movement */
-void		process_movement(t_game *game);
-void		process_rotation(t_game *game);
-void		calculate_movement(t_game *game, double *move_x, double *move_y);
-void		apply_forward_backward(t_game *game, double *move_x,
+void			process_movement(t_game *game);
+void			process_rotation(t_game *game);
+void			calculate_movement(t_game *game, double *move_x, double *move_y);
+void			apply_forward_backward(t_game *game, double *move_x,
 				double *move_y, double speed);
-void		apply_left_right(t_game *game, double *move_x,
+void			apply_left_right(t_game *game, double *move_x,
 				double *move_y, double speed);
+void			process_pitch(t_game *game);
 
 /* Collision */
 int			check_collision(t_game *game, double x, double y);
 int			check_single_point(t_game *game, int map_x, int map_y);
 int			touch(float ray_x, float ray_y, t_game *game);
-void		draw_map_cell(t_game *game, int x, int y);
+void			draw_map_cell(t_game *game, int x, int y);
 
 /* Rendering */
-void		put_pixel(t_game *game, int x, int y, int color);
-void		draw_square(t_game *game, t_square sq);
-void		clear_screen(t_game *game, int color);
-void		draw_map(t_game *game);
-void		draw_ray_line(t_game *game, t_line line);
-void		draw_direction_line(t_game *game, int player_x, int player_y);
+void			put_pixel(t_game *game, int x, int y, int color);
+void			draw_square(t_game *game, t_square sq);
+void			clear_screen(t_game *game, int color);
+void			draw_map(t_game *game);
+void			draw_ray_line(t_game *game, t_line line);
+void			draw_direction_line(t_game *game, int player_x, int player_y);
 
 /* Raycasting */
-void		render_3d_view(t_game *game);
-void		cast_rays_for_3d(t_game *game, double base_angle, double fov_rad);
-double		cast_single_ray(t_game *game, double angle);
+void			render_3d_view(t_game *game);
+void			cast_rays_for_3d(t_game *game, double base_angle, double fov_rad);
+double			cast_single_ray(t_game *game, double angle);
 int			calculate_wall_color(double distance);
-void		draw_wall_slice(t_game *game, t_ray *ray,
-				int x, t_texture *texture);
-void		draw_floor_pixel(t_game *game, int x, int y);
-void		draw_wall_slice_ceiling(t_game *game, int x, int y);
-void		draw_wall_slice_wall(t_game *game, t_ray *ray, int x, int y);
+void			draw_wall_slice(t_game *game, t_ray *ray, int x, t_texture *texture);
+void			draw_floor_pixel(t_game *game, int x, int y);
+void			draw_wall_slice_ceiling(t_game *game, int x, int y);
+void			draw_wall_slice_wall(t_game *game, t_ray *ray, int x, int y);
 int			get_texture_color(t_texture *texture, int x, int y);
-void		init_ray(t_game *game, t_ray *ray, int x);
-void		calculate_step_and_side_dist(t_game *game, t_ray *ray);
-void		perform_dda(t_game *game, t_ray *ray);
-void		calculate_wall_distance(t_game *game, t_ray *ray);
-void		calculate_perp_wall_dist(t_game *game, t_ray *ray);
-void		calculate_line_height_and_draw_range(t_game *game, t_ray *ray);
-t_texture	*get_wall_texture(t_game *game, t_ray *ray);
-void		calculate_wall_texture_coords(t_game *game, t_ray *ray,
+void			init_ray(t_game *game, t_ray *ray, int x);
+void			calculate_step_and_side_dist(t_game *game, t_ray *ray);
+void			perform_dda(t_game *game, t_ray *ray);
+void			calculate_wall_distance(t_game *game, t_ray *ray);
+void			calculate_perp_wall_dist(t_game *game, t_ray *ray);
+void			calculate_line_height_and_draw_range(t_game *game, t_ray *ray);
+
+t_texture		*get_wall_texture(t_game *game, t_ray *ray);
+void			calculate_wall_texture_coords(t_game *game, t_ray *ray,
 				t_texture *texture);
 
 /* Bonus doors */
-void		try_toggle_door(t_game *game);
+void			try_toggle_door(t_game *game);
 int			init_doors_anim(t_game *game);
-void		update_doors(t_game *game);
-void		set_door_target(t_game *game, int x, int y, int opening);
+void			update_doors(t_game *game);
+void			set_door_target(t_game *game, int x, int y, int opening);
 
-double		now_seconds(void);
+double			now_seconds(void);
 
-int			bg_color_from_ray(t_game *game, t_ray *r, int y);
-void		advance_to_next_wall(t_game *game, t_ray *r);
+int				bg_color_from_ray(t_game *game, t_ray *r, int y);
+void			advance_to_next_wall(t_game *game, t_ray *r);
 
-int			compute_tex_y(t_game *game, t_ray *r, t_texture *t, int y);
-int			sample_wall_color(t_game *game, t_ray *r, t_texture *t, int tex_y);
-int			sample_door_color(t_game *game, t_ray *r, t_texture *t, int tex_y);
-void		update_auto_close_targets(t_game *game);
+int				compute_tex_y(t_game *game, t_ray *r, t_texture *t, int y);
+int				sample_wall_color(t_game *game, t_ray *r, t_texture *t, int tex_y);
+int				sample_door_color(t_game *game, t_ray *r, t_texture *t, int tex_y);
+void			update_auto_close_targets(t_game *game);
 
-void		alloc_door_arrays(t_game *game);
-void		init_door_rows(t_game *game);
-void		update_door_cell(t_game *game, int x, int y, double dt);
-void		process_cell(t_game *game, int x, int y, double dt);
+void			alloc_door_arrays(t_game *game);
+void			init_door_rows(t_game *game);
+void			update_door_cell(t_game *game, int x, int y, double dt);
+void			process_cell(t_game *game, int x, int y, double dt);
 
-void		draw_floor_tex_pixel(t_game *game, t_ray *ray, int x, int y);
-int			sample_floor_color_at(t_game *game, t_ray *ray, int y);
+void			draw_floor_tex_pixel(t_game *game, t_ray *ray, int x, int y);
+int				sample_floor_color_at(t_game *game, t_ray *ray, int y);
 
-void		draw_weapon_hud(t_game *game);
-int			handle_mouse_move(int x, int y, t_game *game);
-void		draw_press_e_hint(t_game *game);
-void		draw_crosshair_dot(t_game *game);
+void			draw_weapon_hud(t_game *game);
+int				handle_mouse_move(int x, int y, t_game *game);
+void			draw_press_e_hint(t_game *game);
+void			draw_crosshair_dot(t_game *game);
+void			update_weapon_anim(t_game *game);
+t_texture		*current_weapon_texture(t_game *g);
+int				handle_mouse_press(int button, int x, int y, t_game *game);
+
+/* Sprites (bonus) */
+int				init_sprites(t_game *game);
+void			render_sprites(t_game *game);
+void			free_sprites(t_game *game);
+
+/* Health (bonus) */
+void			init_health(t_game *game);
+void			apply_damage(t_game *game, int amount);
+void			heal_player(t_game *game, int amount);
+void			draw_health_hud(t_game *game);
+void			handle_death_and_respawn(t_game *game);
+
+/* Enemy AI (bonus) */
+void			update_enemies(t_game *game);
+t_texture		*enemy_texture_for(t_game *g, int i);
 
 #endif

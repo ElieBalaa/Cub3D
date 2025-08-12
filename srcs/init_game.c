@@ -54,6 +54,17 @@ int	init_map(t_game *game)
 	return (0);
 }
 
+static void	zero_health_textures(t_texture *t)
+{
+	t->img = NULL;
+	t->addr = NULL;
+	t->bits_per_pixel = 0;
+	t->line_length = 0;
+	t->endian = 0;
+	t->width = 0;
+	t->height = 0;
+}
+
 int	init_game(t_game *game)
 {
 	if (init_mlx(game) || init_player(game) || init_map(game))
@@ -65,18 +76,42 @@ int	init_game(t_game *game)
 	game->keys.left = 0;
 	game->keys.right = 0;
 	game->keys.shift = 0;
+	game->keys.up = 0;
+	game->keys.down = 0;
 	game->fullscreen = 0;
 	game->door_prog = NULL;
 	game->door_target = NULL;
 	game->door_mask = NULL;
 	game->door_last_ts = 0.0;
 	game->door_last_interact = 0.0;
+	game->weapon_anim_phase = 0;
+	game->weapon_anim_started_at = 0.0;
+	game->pitch = 0;
+	game->spr_count = 0;
+	game->spr_x = NULL;
+	game->spr_y = NULL;
+	game->zbuffer = NULL;
+	game->max_health = 100;
+	game->health = 100;
+	game->last_hit_ts = -10.0;
+	game->invuln_secs = 0.6;
+	game->is_dead = 0;
+	zero_health_textures(&game->hp_bar_bg);
+	zero_health_textures(&game->hp_bar_fill);
+	zero_health_textures(&game->hp_icon);
+	zero_health_textures(&game->medkit_tex);
 	return (0);
 }
 
 void	cleanup_game(t_game *game)
 {
 	free_map(game);
+	if (game->spr_x)
+		free(game->spr_x);
+	if (game->spr_y)
+		free(game->spr_y);
+	if (game->zbuffer)
+		free(game->zbuffer);
 	if (game->mlx.img_ptr)
 		mlx_destroy_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
 	if (game->mlx.win_ptr)

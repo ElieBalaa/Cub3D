@@ -12,21 +12,21 @@
 
 #include "../includes/cub3d.h"
 
-void	draw_wall_slice_ceiling(t_game *game, int x, int y)
+void			draw_wall_slice_ceiling(t_game *game, int x, int y)
 {
 	put_pixel(game, x, y, game->map.ceiling_color);
 }
 
-static int	background_color_at(t_game *g, t_ray *hit, int y)
+static int		background_color_at(t_game *g, t_ray *hit, int y)
 {
-	t_ray	cpy;
+	t_ray		cpy;
 
 	cpy = *hit;
 	advance_to_next_wall(g, &cpy);
 	return (bg_color_from_ray(g, &cpy, y));
 }
 
-static int	in_bounds_cell(t_game *g, int mx, int my)
+static int		in_bounds_cell(t_game *g, int mx, int my)
 {
 	if (my < 0 || my >= g->map.height)
 		return (0);
@@ -35,43 +35,64 @@ static int	in_bounds_cell(t_game *g, int mx, int my)
 	return (1);
 }
 
-void	draw_wall_slice_wall(t_game *game, t_ray *ray, int x, int y)
+static void		draw_wall_band(t_game *g, t_ray *r, int x)
 {
+	int			y;
+	double		step;
+	double		texpos;
+	double		start;
 	int			tex_y;
-	int			color;
-	t_texture	*texture;
+	int			col;
+	t_texture	*tx;
 
-	texture = get_wall_texture(game, ray);
-	if (in_bounds_cell(game, (int)ray->map.x, (int)ray->map.y)
-		&& game->map.grid[(int)ray->map.y][(int)ray->map.x] == 'D')
-		texture = &game->door_tex;
-	tex_y = compute_tex_y(game, ray, texture, y);
-	color = sample_wall_color(game, ray, texture, tex_y);
-	if (color < 0)
+	tx = get_wall_texture(g, r);
+	if (in_bounds_cell(g, (int)r->map.x, (int)r->map.y)
+		&& g->map.grid[(int)r->map.y][(int)r->map.x] == 'D')
+		tx = &g->door_tex;
+	step = (double)tx->height / (double)r->line_height;
+	start = (double)g->mlx.current_height * 0.5
+		- (double)r->line_height * 0.5 + (double)g->pitch;
+	texpos = ((double)r->draw_start + 0.5 - start) * step;
+	y = r->draw_start;
+	while (y <= r->draw_end)
 	{
-		color = background_color_at(game, ray, y);
-		put_pixel(game, x, y, color);
-		return ;
+		tex_y = (int)texpos;
+		if (tex_y < 0)
+			tex_y = 0;
+		if (tex_y >= tx->height)
+			tex_y = tx->height - 1;
+		col = sample_wall_color(g, r, tx, tex_y);
+		if (col < 0)
+			col = background_color_at(g, r, y);
+		else if (r->side == 1)
+			col = (col >> 1) & 8355711;
+		put_pixel(g, x, y, col);
+		texpos += step;
+		y++;
 	}
-	if (ray->side == 1)
-		color = (color >> 1) & 8355711;
-	put_pixel(game, x, y, color);
 }
 
-void	draw_wall_slice(t_game *game, t_ray *ray, int x, t_texture *texture)
+void			draw_wall_slice(t_game *game, t_ray *ray, int x, t_texture *texture)
 {
-	int	y;
+	int			y;
 
 	(void)texture;
 	y = 0;
+	while (y < ray->draw_start && y < game->mlx.current_height)
+	{
+		draw_wall_slice_ceiling(game, x, y);
+		y++;
+	}
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+	if (ray->draw_end >= game->mlx.current_height)
+		ray->draw_end = game->mlx.current_height - 1;
+	if (ray->draw_start <= ray->draw_end)
+		draw_wall_band(game, ray, x);
+	y = ray->draw_end + 1;
 	while (y < game->mlx.current_height)
 	{
-		if (y < ray->draw_start)
-			draw_wall_slice_ceiling(game, x, y);
-		else if (y >= ray->draw_start && y <= ray->draw_end)
-			draw_wall_slice_wall(game, ray, x, y);
-		else
-			draw_floor_tex_pixel(game, ray, x, y);
+		draw_floor_tex_pixel(game, ray, x, y);
 		y++;
 	}
 }

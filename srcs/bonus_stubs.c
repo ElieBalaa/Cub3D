@@ -36,3 +36,8 @@ void	register_event_handlers(t_game *game)
 	mlx_hook(game->mlx.win_ptr, 3, 1L << 1, handle_key_release, game);
 	mlx_hook(game->mlx.win_ptr, 17, 1L << 17, close_game, game);
 }
+
+void	process_pitch(t_game *game)
+{
+	(void)game;
+}

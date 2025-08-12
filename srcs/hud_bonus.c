@@ -44,18 +44,26 @@ void	draw_weapon_hud(t_game *game)
 	int		start_y;
 	int		src_y;
 	int		off;
+	t_texture	saved;
+	t_texture	*cur;
 
 	if (!game->weapon_tex.img)
 		return ;
-	off = game->weapon_tex.width / 10;
-	start_x = (game->mlx.current_width - game->weapon_tex.width) / 2 + off + 15;
-	start_y = game->mlx.current_height - game->weapon_tex.height;
+	saved = game->weapon_tex;
+	cur = &saved;
+	if (game->weapon_anim_phase != 0)
+		cur = current_weapon_texture(game);
+	off = cur->width / 10;
+	start_x = (game->mlx.current_width - cur->width) / 2 + off + 15;
+	start_y = game->mlx.current_height - cur->height;
 	src_y = 0;
-	while (src_y < game->weapon_tex.height)
+	while (src_y < cur->height)
 	{
+		game->weapon_tex = *cur;
 		draw_weapon_row(game, start_x, start_y, src_y);
 		src_y++;
 	}
+	game->weapon_tex = saved;
 }
 
 static int	nearby_door_cell(t_game *g)

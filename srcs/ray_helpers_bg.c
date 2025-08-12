@@ -21,7 +21,7 @@ static int	shade_if_side_bg(int color, int side)
 
 static void	advance_to_next_wall_bg(t_game *g, t_ray *r)
 {
-	int	in_bounds;
+	int		in_bounds;
 
 	in_bounds = 1;
 	while (in_bounds)
@@ -52,31 +52,40 @@ static int	bg_color_from_ray_bg(t_game *g, t_ray *r, int y)
 	t_texture	*tx;
 	double		step;
 	double		pos;
+	double		start_unclipped;
 	int			tex_y;
 	int			col;
+	int			vy;
 
 	calculate_perp_wall_dist(g, r);
 	calculate_line_height_and_draw_range(g, r);
-	if (y < r->draw_start)
+	vy = y - g->pitch;
+	if (vy < r->draw_start)
 		return (g->map.ceiling_color);
-	if (y > r->draw_end)
+	if (vy > r->draw_end)
 		return (sample_floor_color_at(g, r, y));
 	tx = get_wall_texture(g, r);
 	calculate_wall_texture_coords(g, r, tx);
-	step = 1.0 * tx->height / r->line_height;
-	pos = (y - r->draw_start) * step;
-	tex_y = (int)pos & (tx->height - 1);
+	step = (double)tx->height / (double)r->line_height;
+	start_unclipped = (double)g->mlx.current_height * 0.5
+		- (double)r->line_height * 0.5;
+	pos = ((double)vy + 0.5 - start_unclipped) * step;
+	if (pos < 0.0)
+		pos = 0.0;
+	tex_y = (int)pos;
+	if (tex_y >= tx->height)
+		tex_y = tx->height - 1;
 	col = get_texture_color(tx, r->tex_x, tex_y);
 	col = shade_if_side_bg(col, r->side);
 	return (col);
 }
 
-int	bg_color_from_ray(t_game *g, t_ray *r, int y)
+int			bg_color_from_ray(t_game *g, t_ray *r, int y)
 {
 	return (bg_color_from_ray_bg(g, r, y));
 }
 
-void	advance_to_next_wall(t_game *g, t_ray *r)
+void			advance_to_next_wall(t_game *g, t_ray *r)
 {
 	advance_to_next_wall_bg(g, r);
 }

@@ -41,6 +41,10 @@ int	handle_key_press(int keycode, t_game *game)
 		toggle_fullscreen(game);
 	if (keycode == KEY_E)
 		try_toggle_door(game);
+	if (keycode == KEY_UP)
+		game->keys.up = 1;
+	if (keycode == KEY_DOWN)
+		game->keys.down = 1;
 	return (0);
 }
 
@@ -60,6 +64,10 @@ int	handle_key_release(int keycode, t_game *game)
 		game->keys.right = 0;
 	if (keycode == KEY_SHIFT)
 		game->keys.shift = 0;
+	if (keycode == KEY_UP)
+		game->keys.up = 0;
+	if (keycode == KEY_DOWN)
+		game->keys.down = 0;
 	return (0);
 }
 
@@ -88,14 +96,26 @@ int	game_loop(t_game *game)
 {
 	process_movement(game);
 	process_rotation(game);
+	process_pitch(game);
 	update_doors(game);
+	update_enemies(game);
+	update_weapon_anim(game);
+	if (!game->zbuffer)
+		game->zbuffer = malloc(sizeof(double) * game->mlx.current_width);
+	if (game->spr_count == 0)
+		init_sprites(game);
+	if (game->max_health == 0)
+		init_health(game);
 	clear_screen(game, COLOR_BLACK);
 	render_3d_view(game);
+	render_sprites(game);
 	draw_minimap(game);
+	draw_health_hud(game);
 	draw_weapon_hud(game);
 	draw_crosshair_dot(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr,
 		game->mlx.img_ptr, 0, 0);
 	draw_press_e_hint(game);
+	handle_death_and_respawn(game);
 	return (0);
 }

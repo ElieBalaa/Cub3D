@@ -52,10 +52,12 @@ void	calculate_line_height_and_draw_range(t_game *game, t_ray *ray)
 	if (ray->perp_wall_dist < 1e-6)
 		ray->perp_wall_dist = 1e-6;
 	ray->line_height = (int)(game->mlx.current_height / ray->perp_wall_dist);
-	ray->draw_start = -ray->line_height / 2 + game->mlx.current_height / 2;
+	ray->draw_start = -ray->line_height / 2 + game->mlx.current_height / 2
+		+ game->pitch;
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
-	ray->draw_end = ray->line_height / 2 + game->mlx.current_height / 2;
+	ray->draw_end = ray->line_height / 2 + game->mlx.current_height / 2
+		+ game->pitch;
 	if (ray->draw_end >= game->mlx.current_height)
 		ray->draw_end = game->mlx.current_height - 1;
 }

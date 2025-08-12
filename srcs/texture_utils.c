@@ -12,9 +12,9 @@
 
 #include "../includes/cub3d.h"
 
-int	get_texture_color(t_texture *texture, int x, int y)
+int		get_texture_color(t_texture *texture, int x, int y)
 {
-	char	*dst;
+	char		*dst;
 
 	if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
 		return (0);
@@ -23,7 +23,7 @@ int	get_texture_color(t_texture *texture, int x, int y)
 	return (*(unsigned int *)dst);
 }
 
-int	load_texture(t_game *game, t_texture *texture, char *path)
+int		load_texture(t_game *game, t_texture *texture, char *path)
 {
 	if (!path)
 		return (1);
@@ -32,11 +32,31 @@ int	load_texture(t_game *game, t_texture *texture, char *path)
 	if (!texture->img)
 		return (1);
 	texture->addr = mlx_get_data_addr(texture->img, &texture->bits_per_pixel,
-			&texture->line_length, &texture->endian);
+				&texture->line_length, &texture->endian);
 	return (0);
 }
 
-int	load_textures(t_game *game)
+static void	load_health_textures(t_game *game)
+{
+	load_texture(game, &game->hp_bar_bg,
+			"./textures/health/health_bar_background.xpm");
+	load_texture(game, &game->hp_bar_fill,
+			"./textures/health/health_bar_fill.xpm");
+	load_texture(game, &game->hp_icon,
+			"./textures/health/HP.xpm");
+	load_texture(game, &game->medkit_tex,
+			"./textures/health/medkit.xpm");
+}
+
+static void	load_enemy_textures(t_game *game)
+{
+	load_texture(game, &game->enemy_tex,
+			"./textures/enemy/enemy-standing.xpm");
+	load_texture(game, &game->enemy_shoot_tex,
+			"./textures/enemy/shooting.xpm");
+}
+
+int		load_textures(t_game *game)
 {
 	if (!game->map.north_texture || !game->map.south_texture
 		|| !game->map.west_texture || !game->map.east_texture)
@@ -56,7 +76,15 @@ int	load_textures(t_game *game)
 	if (load_texture(game, &game->weapon_tex,
 			"./textures/weapon/weapon.xpm"))
 		return (1);
+	if (load_texture(game, &game->weapon1_tex,
+			"./textures/weapon/weapon-1.xpm"))
+		return (1);
+	if (load_texture(game, &game->weapon2_tex,
+			"./textures/weapon/weapon-2.xpm"))
+		return (1);
 	if (load_texture(game, &game->dot_tex, "./textures/weapon/dot.xpm"))
 		return (1);
+	load_enemy_textures(game);
+	load_health_textures(game);
 	return (0);
 }

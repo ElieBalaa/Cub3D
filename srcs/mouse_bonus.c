@@ -31,25 +31,44 @@ static void	apply_rotation_by_delta(t_game *g, double delta)
 		+ g->player.plane.y * cos(rot);
 }
 
+static void	clamp_pitch(t_game *g)
+{
+	if (g->pitch < PITCH_MIN)
+		g->pitch = PITCH_MIN;
+	if (g->pitch > PITCH_MAX)
+		g->pitch = PITCH_MAX;
+}
+
 int	handle_mouse_move(int x, int y, t_game *game)
 {
-	static int	initialized = 0;
-	int			cx;
-	int			cy;
-	int			dx;
+	int		cx;
+	int		cy;
+	int		dx;
+	int		dy;
 
-	(void)y;
 	cx = game->mlx.current_width / 2;
 	cy = game->mlx.current_height / 2;
-	if (!initialized)
-	{
-		mlx_mouse_move(game->mlx.mlx_ptr, game->mlx.win_ptr, cx, cy);
-		initialized = 1;
-		return (0);
-	}
 	dx = x - cx;
+	dy = y - cy;
 	if (dx != 0)
 		apply_rotation_by_delta(game, (double)dx);
+	if (dy != 0)
+	{
+		game->pitch -= dy;
+		clamp_pitch(game);
+	}
 	mlx_mouse_move(game->mlx.mlx_ptr, game->mlx.win_ptr, cx, cy);
+	return (0);
+}
+
+int	handle_mouse_press(int button, int x, int y, t_game *game)
+{
+	(void)x;
+	(void)y;
+	if (button == 1)
+	{
+		game->weapon_anim_phase = 1;
+		game->weapon_anim_started_at = now_seconds();
+	}
 	return (0);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bonus_stubs2.c                                     :+:      :+:    :+:   */
+/*   bonus_stubs2.c                                     :+:      :+:      :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omar-iskandarani <omar-iskandarani@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -33,4 +33,64 @@ void	draw_press_e_hint(t_game *game)
 void	draw_crosshair_dot(t_game *game)
 {
 	(void)game;
+}
+
+void	update_weapon_anim(t_game *game)
+{
+	(void)game;
+}
+
+int		init_sprites(t_game *game)
+{
+	(void)game;
+	return (0);
+}
+
+void	render_sprites(t_game *game)
+{
+	(void)game;
+}
+
+void	free_sprites(t_game *game)
+{
+	(void)game;
+}
+
+void	init_health(t_game *game)
+{
+	(void)game;
+}
+
+void	apply_damage(t_game *game, int amount)
+{
+	(void)game;
+	(void)amount;
+}
+
+void	heal_player(t_game *game, int amount)
+{
+	(void)game;
+	(void)amount;
+}
+
+void	draw_health_hud(t_game *game)
+{
+	(void)game;
+}
+
+void	handle_death_and_respawn(t_game *game)
+{
+	(void)game;
+}
+
+void	update_enemies(t_game *game)
+{
+	(void)game;
+}
+
+t_texture	*enemy_texture_for(t_game *g, int i)
+{
+	(void)g;
+	(void)i;
+	return (NULL);
 }
