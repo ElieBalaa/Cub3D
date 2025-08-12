@@ -23,6 +23,10 @@ int	handle_key_press(int keycode, t_game *game)
 {
 	if (keycode == KEY_ESC)
 		close_game(game);
+	if (game->is_dead && keycode == KEY_SPACE)
+		restart_game(game);
+	if (game->is_dead)
+		return (0);
 	if (keycode == KEY_W)
 		game->keys.w = 1;
 	if (keycode == KEY_A)
@@ -98,12 +102,18 @@ int	game_loop(t_game *game)
 	process_rotation(game);
 	process_pitch(game);
 	update_doors(game);
-	update_enemies(game);
-	update_weapon_anim(game);
-	if (!game->zbuffer)
-		game->zbuffer = malloc(sizeof(double) * game->mlx.current_width);
 	if (game->spr_count == 0)
 		init_sprites(game);
+	if (game->med_count == 0)
+		init_medkits(game);
+	if (game->ammo_count == 0)
+		init_ammo_pickups(game);
+	update_enemies(game);
+	update_weapon_anim(game);
+	update_medkits(game);
+	update_ammo_pickups(game);
+	if (!game->zbuffer)
+		game->zbuffer = malloc(sizeof(double) * game->mlx.current_width);
 	if (game->max_health == 0)
 		init_health(game);
 	clear_screen(game, COLOR_BLACK);
@@ -112,10 +122,14 @@ int	game_loop(t_game *game)
 	draw_minimap(game);
 	draw_health_hud(game);
 	draw_weapon_hud(game);
+	draw_ammo_hud(game);
 	draw_crosshair_dot(game);
+	draw_death_overlay(game);
+	draw_death_image(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr,
 		game->mlx.img_ptr, 0, 0);
 	draw_press_e_hint(game);
+	draw_death_message(game);
 	handle_death_and_respawn(game);
 	return (0);
 }

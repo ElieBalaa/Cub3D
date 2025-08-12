@@ -64,6 +64,7 @@
 # define KEY_E 101
 # define KEY_UP 65362
 # define KEY_DOWN 65364
+# define KEY_SPACE 32
 
 /* Colors */
 # define COLOR_RED 0xFF0000
@@ -193,10 +194,12 @@ typedef struct s_game
 	t_texture	dot_tex;
 	t_texture	enemy_tex;
 	t_texture	enemy_shoot_tex;
+	t_texture	enemy_dead_tex;
 	t_texture	hp_bar_bg;
 	t_texture	hp_bar_fill;
 	t_texture	hp_icon;
 	t_texture	medkit_tex;
+	t_texture	ammo_tex;
 	double		**door_prog;
 	char		**door_target;
 	char		**door_mask;
@@ -222,6 +225,18 @@ typedef struct s_game
 	double		*spr_next_shot;
 	double		*spr_shoot_until;
 	int			*spr_spotted;
+	int			*spr_health;
+	int			*spr_alive;
+	t_texture	game_over_tex;
+	int			med_count;
+	int			*med_x;
+	int			*med_y;
+	int			*med_alive;
+	int			ammo;
+	int			ammo_count;
+	int			*ammo_x;
+	int			*ammo_y;
+	int			*ammo_alive;
 } t_game;
 
 /* Function prototypes */
@@ -285,6 +300,8 @@ void			draw_minimap_background_and_border(t_game *game);
 void			draw_minimap_world_cells(t_game *game);
 void			draw_minimap_cell_at_pos(t_game *game, int world_x, int world_y);
 void			draw_minimap_player_professional(t_game *game);
+void			draw_minimap_enemies(t_game *game);
+void			draw_minimap_items(t_game *game);
 void			draw_minimap_border_pixel(t_game *game, int x, int y, int center_x);
 
 /* Movement */
@@ -355,11 +372,18 @@ void			process_cell(t_game *game, int x, int y, double dt);
 
 void			draw_floor_tex_pixel(t_game *game, t_ray *ray, int x, int y);
 int				sample_floor_color_at(t_game *game, t_ray *ray, int y);
+int			corpse_overlay_color(t_game *game, double wx, double wy,
+			int base_color);
+int			medkit_overlay_color(t_game *game, double wx, double wy,
+			int base_color);
+int			ammo_overlay_color(t_game *game, double wx, double wy,
+			int base_color);
 
 void			draw_weapon_hud(t_game *game);
 int				handle_mouse_move(int x, int y, t_game *game);
 void			draw_press_e_hint(t_game *game);
 void			draw_crosshair_dot(t_game *game);
+void			draw_ammo_hud(t_game *game);
 void			update_weapon_anim(t_game *game);
 t_texture		*current_weapon_texture(t_game *g);
 int				handle_mouse_press(int button, int x, int y, t_game *game);
@@ -375,9 +399,24 @@ void			apply_damage(t_game *game, int amount);
 void			heal_player(t_game *game, int amount);
 void			draw_health_hud(t_game *game);
 void			handle_death_and_respawn(t_game *game);
+void			restart_game(t_game *game);
+void			draw_death_overlay(t_game *game);
+void			draw_death_message(t_game *game);
+void			draw_death_image(t_game *game);
 
 /* Enemy AI (bonus) */
 void			update_enemies(t_game *game);
 t_texture		*enemy_texture_for(t_game *g, int i);
+void			attempt_player_shot(t_game *game);
+
+/* Medkits (bonus) */
+int			init_medkits(t_game *game);
+void			free_medkits(t_game *game);
+void			update_medkits(t_game *game);
+
+/* Ammo (bonus) */
+int			init_ammo_pickups(t_game *game);
+void			free_ammo_pickups(t_game *game);
+void			update_ammo_pickups(t_game *game);
 
 #endif

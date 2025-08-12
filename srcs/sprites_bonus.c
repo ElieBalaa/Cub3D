@@ -72,8 +72,11 @@ int			init_sprites(t_game *g)
 	g->spr_last_seen = malloc(sizeof(double) * g->spr_count);
 	g->spr_next_shot = malloc(sizeof(double) * g->spr_count);
 	g->spr_shoot_until = malloc(sizeof(double) * g->spr_count);
+	g->spr_health = malloc(sizeof(int) * g->spr_count);
+	g->spr_alive = malloc(sizeof(int) * g->spr_count);
 	if (!g->spr_x || !g->spr_y || !g->spr_spotted
-		|| !g->spr_last_seen || !g->spr_next_shot || !g->spr_shoot_until)
+		|| !g->spr_last_seen || !g->spr_next_shot || !g->spr_shoot_until
+		|| !g->spr_health || !g->spr_alive)
 		return (1);
 	fill_terrorists(g);
 	i = 0;
@@ -83,6 +86,8 @@ int			init_sprites(t_game *g)
 		g->spr_last_seen[i] = 0.0;
 		g->spr_next_shot[i] = 1e9;
 		g->spr_shoot_until[i] = 0.0;
+		g->spr_health[i] = 100;
+		g->spr_alive[i] = 1;
 		i++;
 	}
 	return (0);
@@ -161,6 +166,35 @@ static int	player_visible(t_game *g, double spr_x, double spr_y)
 	return (1);
 }
 
+static int	project_sprite(t_game *g, int idx, int *screen_x,
+			int *size, int *bottom_y, double *trans_y)
+{
+	double		rel_x;
+	double		rel_y;
+	double		inv_det;
+	double		trans_x;
+	int			center_y;
+	int			size_wall;
+	double		scale;
+
+	rel_x = (double)g->spr_x[idx] - g->player.pos.x / MAP_SCALE + 0.5;
+	rel_y = (double)g->spr_y[idx] - g->player.pos.y / MAP_SCALE + 0.5;
+	inv_det = 1.0 / (g->player.plane.x * g->player.dir.y
+		- g->player.dir.x * g->player.plane.y);
+	trans_x = inv_det * (g->player.dir.y * rel_x - g->player.dir.x * rel_y);
+	*trans_y = inv_det * (-g->player.plane.y * rel_x
+		+ g->player.plane.x * rel_y);
+	if (*trans_y <= 0)
+		return (0);
+	*screen_x = (int)((g->mlx.current_width / 2) * (1 + trans_x / *trans_y));
+	center_y = g->mlx.current_height / 2 + g->pitch;
+	size_wall = (int)(g->mlx.current_height / *trans_y);
+	scale = g->spr_alive[idx] ? 0.85 : 0.35;
+	*size = (int)(size_wall * scale);
+	*bottom_y = center_y + size_wall / 2;
+	return (1);
+}
+
 void			update_enemies(t_game *g)
 {
 	int			k;
@@ -175,6 +209,13 @@ void			update_enemies(t_game *g)
 	k = 0;
 	while (k < g->spr_count)
 	{
+		if (!g->spr_alive[k])
+		{
+			g->spr_spotted[k] = 0;
+			g->spr_shoot_until[k] = 0.0;
+			k++;
+			continue ;
+		}
 		sx = (double)g->spr_x[k];
 		sy = (double)g->spr_y[k];
 		vis = player_visible(g, sx, sy);
@@ -206,6 +247,8 @@ t_texture		*enemy_texture_for(t_game *g, int i)
 	double	now;
 
 	now = now_seconds();
+	if (g->spr_alive && !g->spr_alive[i])
+		return (&g->enemy_dead_tex);
 	if (g->spr_shoot_until && now < g->spr_shoot_until[i])
 		return (&g->enemy_shoot_tex);
 	return (&g->enemy_tex);
@@ -257,7 +300,6 @@ static void	render_single_sprite(t_game *g, double spr_x, double spr_y, int idx)
 	double		scale;
 	int			center_y;
 
-	(void)idx;
 	rel_x = spr_x - g->player.pos.x / MAP_SCALE + 0.5;
 	rel_y = spr_y - g->player.pos.y / MAP_SCALE + 0.5;
 	inv_det = 1.0 / (g->player.plane.x * g->player.dir.y
@@ -270,6 +312,10 @@ static void	render_single_sprite(t_game *g, double spr_x, double spr_y, int idx)
 	screen_x = (int)((g->mlx.current_width / 2) * (1 + trans_x / trans_y));
 	center_y = g->mlx.current_height / 2 + g->pitch;
 	size_wall = (int)(g->mlx.current_height / trans_y);
+	if (!g->spr_alive[idx])
+	{
+		return ;
+	}
 	scale = 0.85;
 	size = (int)(size_wall * scale);
 	bottom_y = center_y + size_wall / 2;
@@ -289,7 +335,7 @@ void			render_sprites(t_game *g)
 {
 	int			k;
 
-	if (!g->enemy_tex.img || g->spr_count <= 0)
+	if ((!g->enemy_tex.img && !g->enemy_dead_tex.img) || g->spr_count <= 0)
 		return ;
 	k = 0;
 	while (k < g->spr_count)
@@ -313,11 +359,61 @@ void			free_sprites(t_game *g)
 		free(g->spr_next_shot);
 	if (g->spr_shoot_until)
 		free(g->spr_shoot_until);
+	if (g->spr_health)
+		free(g->spr_health);
+	if (g->spr_alive)
+		free(g->spr_alive);
 	g->spr_x = NULL;
 	g->spr_y = NULL;
 	g->spr_spotted = NULL;
 	g->spr_last_seen = NULL;
 	g->spr_next_shot = NULL;
 	g->spr_shoot_until = NULL;
+	g->spr_health = NULL;
+	g->spr_alive = NULL;
 	g->spr_count = 0;
+} 
+
+void			attempt_player_shot(t_game *g)
+{
+	int		k;
+	int		cx;
+	int		screen_x;
+	int		size;
+	int		bottom_y;
+	double		trans_y;
+
+	cx = g->mlx.current_width / 2;
+	k = 0;
+	while (k < g->spr_count)
+	{
+		if (g->spr_alive[k]
+			&& project_sprite(g, k, &screen_x, &size, &bottom_y, &trans_y))
+		{
+			int ds;
+			int de;
+
+			ds = screen_x - size / 2;
+			de = screen_x + size / 2;
+			if (cx >= ds && cx < de
+				&& g->mlx.current_height / 2 >= (bottom_y - size)
+				&& g->mlx.current_height / 2 < bottom_y)
+			{
+				if (!g->zbuffer || trans_y < g->zbuffer[cx])
+				{
+					if (player_visible(g, (double)g->spr_x[k], (double)g->spr_y[k]))
+					{
+						g->spr_health[k] -= 40;
+						if (g->spr_health[k] <= 0)
+						{
+							g->spr_alive[k] = 0;
+							g->spr_spotted[k] = 0;
+							g->spr_shoot_until[k] = 0.0;
+						}
+					}
+				}
+			}
+		}
+		k++;
+	}
 } 

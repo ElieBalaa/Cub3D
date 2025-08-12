@@ -104,3 +104,51 @@ void	draw_press_e_hint(t_game *game)
 	mlx_string_put(game->mlx.mlx_ptr, game->mlx.win_ptr, x, y,
 		COLOR_WHITE, "Press E to open the Door");
 }
+
+static void	itoa_dec(int n, char *buf, int sz)
+{
+	int		i;
+	int		tmp;
+	int		neg;
+
+	if (sz <= 1)
+		return ;
+	neg = (n < 0);
+	if (neg)
+		n = -n;
+	i = 0;
+	if (n == 0)
+		buf[i++] = '0';
+	while (n > 0 && i < sz - 1)
+	{
+		buf[i++] = '0' + (n % 10);
+		n /= 10;
+	}
+	if (neg && i < sz - 1)
+		buf[i++] = '-';
+	buf[i] = '\0';
+	/* reverse in place */
+	i--;
+	tmp = 0;
+	while (tmp < i)
+	{
+		char c = buf[tmp];
+		buf[tmp] = buf[i];
+		buf[i] = c;
+		tmp++;
+		i--;
+	}
+}
+
+void			draw_ammo_hud(t_game *g)
+{
+	char		num[16];
+	int			x;
+	int			y;
+
+	ft_memset(num, 0, sizeof(num));
+	itoa_dec(g->ammo, num, (int)sizeof(num));
+	x = g->mlx.current_width - 80;
+	y = g->mlx.current_height - 40;
+	mlx_string_put(g->mlx.mlx_ptr, g->mlx.win_ptr, x, y, 0xFFFFFF, num);
+}

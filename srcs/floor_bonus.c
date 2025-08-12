@@ -51,18 +51,129 @@ static int	floor_tex_color(t_game *g, double cx, double cy)
 {
 	int			tx;
 	int			ty;
-	t_texture	*t;
+	int			color;
+	int			w;
+	int			h;
 
-	t = &g->floor_tex;
-	if (!t->img || t->width <= 0 || t->height <= 0)
+	if (!g->floor_tex.img)
 		return (g->map.floor_color);
-	tx = ((int)(cx * t->width)) % t->width;
-	ty = ((int)(cy * t->height)) % t->height;
+	w = g->floor_tex.width;
+	h = g->floor_tex.height;
+	tx = ((int)(cx * w)) % w;
+	ty = ((int)(cy * h)) % h;
 	if (tx < 0)
 		tx = 0;
 	if (ty < 0)
 		ty = 0;
-	return (get_texture_color(t, tx, ty));
+	color = get_texture_color(&g->floor_tex, tx, ty);
+	return (color);
+}
+
+static void	corpse_half_extents(t_game *g, double *hw, double *hl)
+{
+	double	len;
+	double	r;
+
+	len = 0.8;
+	r = 0.5;
+	if (g->enemy_dead_tex.img && g->enemy_dead_tex.height > 0)
+		r = (double)g->enemy_dead_tex.width
+			/ (double)g->enemy_dead_tex.height;
+	*hl = len * 0.5;
+	*hw = (len * r) * 0.5;
+}
+
+static int	is_dead_here(t_game *g, double wx, double wy)
+{
+	int		k;
+	double		dx;
+	double		dy;
+	double		hw;
+	double		hl;
+
+	k = 0;
+	while (k < g->spr_count)
+	{
+		if (g->spr_alive && !g->spr_alive[k])
+		{
+			corpse_half_extents(g, &hw, &hl);
+			dx = wx - ((double)g->spr_x[k] + 0.5);
+			dy = wy - ((double)g->spr_y[k] + 0.5);
+			if (fabs(dx) <= hw && fabs(dy) <= hl)
+				return (1);
+		}
+		k++;
+	}
+	return (0);
+}
+
+static int	corpse_sample_color(t_game *g, double wx, double wy)
+{
+	int		k;
+	double		dx;
+	double		dy;
+	double		hw;
+	double		hl;
+	double		u;
+	double		v;
+	int			tx;
+	int			ty;
+	int			key;
+
+	if (!g->enemy_dead_tex.img)
+		return (-1);
+	k = 0;
+	while (k < g->spr_count)
+	{
+		if (g->spr_alive && !g->spr_alive[k])
+		{
+			corpse_half_extents(g, &hw, &hl);
+			dx = wx - ((double)g->spr_x[k] + 0.5);
+			dy = wy - ((double)g->spr_y[k] + 0.5);
+			if (fabs(dx) <= hw && fabs(dy) <= hl)
+			{
+				u = (dx + hw) / (2.0 * hw);
+				v = (dy + hl) / (2.0 * hl);
+				if (u < 0.0)
+					u = 0.0;
+				if (u > 1.0)
+					u = 1.0;
+				if (v < 0.0)
+					v = 0.0;
+				if (v > 1.0)
+					v = 1.0;
+				tx = (int)(u * g->enemy_dead_tex.width);
+				ty = (int)((1.0 - v) * g->enemy_dead_tex.height);
+				key = get_texture_color(&g->enemy_dead_tex, 0, 0);
+				if (tx < 0)
+					tx = 0;
+				if (ty < 0)
+					ty = 0;
+				if (tx >= g->enemy_dead_tex.width)
+					tx = g->enemy_dead_tex.width - 1;
+				if (ty >= g->enemy_dead_tex.height)
+					ty = g->enemy_dead_tex.height - 1;
+				if (get_texture_color(&g->enemy_dead_tex, tx, ty) != key)
+					return (get_texture_color(&g->enemy_dead_tex, tx, ty));
+			}
+		}
+		k++;
+	}
+	return (-1);
+}
+
+int			corpse_overlay_color(t_game *g, double wx, double wy, int base)
+{
+	int		cc;
+
+	if (!g->spr_alive || g->spr_count <= 0)
+		return (base);
+	if (!is_dead_here(g, wx, wy))
+		return (base);
+	cc = corpse_sample_color(g, wx, wy);
+	if (cc == -1)
+		return (base);
+	return (cc);
 }
 
 int			sample_floor_color_at(t_game *g, t_ray *r, int y)
@@ -71,10 +182,9 @@ int			sample_floor_color_at(t_game *g, t_ray *r, int y)
 	double		w;
 	double		fx;
 	double		fy;
-	int			vy;
+	int			base;
 
-	vy = y - g->pitch;
-	den = (double)(2 * vy - g->mlx.current_height);
+	den = (double)(2 * (y - g->pitch) - g->mlx.current_height);
 	if (den == 0.0)
 		den = 1e-6;
 	if (r->perp_wall_dist < 1e-6)
@@ -84,7 +194,11 @@ int			sample_floor_color_at(t_game *g, t_ray *r, int y)
 	floor_wall_point(r, compute_wall_x(g, r), &fx, &fy);
 	fx = w * fx + (1.0 - w) * (g->player.pos.x / MAP_SCALE);
 	fy = w * fy + (1.0 - w) * (g->player.pos.y / MAP_SCALE);
-	return (floor_tex_color(g, fx, fy));
+	base = floor_tex_color(g, fx, fy);
+	base = corpse_overlay_color(g, fx, fy, base);
+	base = medkit_overlay_color(g, fx, fy, base);
+	base = ammo_overlay_color(g, fx, fy, base);
+	return (base);
 }
 
 void			draw_floor_tex_pixel(t_game *g, t_ray *r, int x, int y)

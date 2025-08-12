@@ -100,6 +100,16 @@ int	init_game(t_game *game)
 	zero_health_textures(&game->hp_bar_fill);
 	zero_health_textures(&game->hp_icon);
 	zero_health_textures(&game->medkit_tex);
+	zero_health_textures(&game->ammo_tex);
+	game->med_count = 0;
+	game->med_x = NULL;
+	game->med_y = NULL;
+	game->med_alive = NULL;
+	game->ammo = 30;
+	game->ammo_count = 0;
+	game->ammo_x = NULL;
+	game->ammo_y = NULL;
+	game->ammo_alive = NULL;
 	return (0);
 }
 

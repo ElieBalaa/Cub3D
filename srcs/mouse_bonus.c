@@ -67,8 +67,13 @@ int	handle_mouse_press(int button, int x, int y, t_game *game)
 	(void)y;
 	if (button == 1)
 	{
-		game->weapon_anim_phase = 1;
-		game->weapon_anim_started_at = now_seconds();
+		if (!game->is_dead && game->ammo > 0)
+		{
+			game->weapon_anim_phase = 1;
+			game->weapon_anim_started_at = now_seconds();
+			attempt_player_shot(game);
+			game->ammo--;
+		}
 	}
 	return (0);
 }

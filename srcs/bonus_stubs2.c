@@ -17,13 +17,7 @@ void	draw_weapon_hud(t_game *game)
 	(void)game;
 }
 
-int	handle_mouse_move(int x, int y, t_game *game)
-{
-	(void)x;
-	(void)y;
-	(void)game;
-	return (0);
-}
+// handle_mouse_move stub is provided in mandatory_stubs.c
 
 void	draw_press_e_hint(t_game *game)
 {
@@ -94,3 +88,20 @@ t_texture	*enemy_texture_for(t_game *g, int i)
 	(void)i;
 	return (NULL);
 }
+
+void	restart_game(t_game *game)
+{
+	(void)game;
+}
+
+void	draw_death_overlay(t_game *game)
+{
+	(void)game;
+}
+
+void	draw_death_message(t_game *game)
+{
+	(void)game;
+}
+
+// draw_death_image stub is provided in mandatory_stubs.c

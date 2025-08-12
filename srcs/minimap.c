@@ -115,5 +115,7 @@ void	draw_minimap(t_game *game)
 {
 	draw_minimap_background_and_border(game);
 	draw_minimap_world_cells(game);
+	draw_minimap_items(game);
+	draw_minimap_enemies(game);
 	draw_minimap_player_professional(game);
 }

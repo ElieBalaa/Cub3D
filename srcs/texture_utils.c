@@ -54,6 +54,17 @@ static void	load_enemy_textures(t_game *game)
 			"./textures/enemy/enemy-standing.xpm");
 	load_texture(game, &game->enemy_shoot_tex,
 			"./textures/enemy/shooting.xpm");
+	load_texture(game, &game->enemy_dead_tex,
+			"./textures/enemy/dead.xpm");
+}
+
+static void	load_ui_textures(t_game *game)
+{
+	load_health_textures(game);
+	load_texture(game, &game->game_over_tex,
+			"./textures/health/game_over.xpm");
+	load_texture(game, &game->ammo_tex,
+			"./textures/weapon/amo.xpm");
 }
 
 int		load_textures(t_game *game)
@@ -85,6 +96,6 @@ int		load_textures(t_game *game)
 	if (load_texture(game, &game->dot_tex, "./textures/weapon/dot.xpm"))
 		return (1);
 	load_enemy_textures(game);
-	load_health_textures(game);
+	load_ui_textures(game);
 	return (0);
 }
