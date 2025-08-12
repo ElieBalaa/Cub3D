@@ -143,12 +143,30 @@ static void	itoa_dec(int n, char *buf, int sz)
 void			draw_ammo_hud(t_game *g)
 {
 	char		num[16];
-	int			x;
-	int			y;
+	int		x;
+	int		y;
+	int		dx;
+	int		dy;
 
 	ft_memset(num, 0, sizeof(num));
 	itoa_dec(g->ammo, num, (int)sizeof(num));
-	x = g->mlx.current_width - 80;
-	y = g->mlx.current_height - 40;
+	/* Top-left corner, small margin */
+	x = 12;
+	y = 20;
+	/* Outline to make it bigger and readable */
+	dy = -1;
+	while (dy <= 1)
+	{
+		dx = -1;
+		while (dx <= 1)
+		{
+			if (dx != 0 || dy != 0)
+				mlx_string_put(g->mlx.mlx_ptr, g->mlx.win_ptr,
+				x + dx, y + dy, 0x000000, num);
+			dx++;
+		}
+		dy++;
+	}
+	/* Main white text on top */
 	mlx_string_put(g->mlx.mlx_ptr, g->mlx.win_ptr, x, y, 0xFFFFFF, num);
 }
