@@ -122,12 +122,12 @@ int	game_loop(t_game *game)
 	draw_minimap(game);
 	draw_health_hud(game);
 	draw_weapon_hud(game);
-	draw_ammo_hud(game);
 	draw_crosshair_dot(game);
 	draw_death_overlay(game);
 	draw_death_image(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr,
 		game->mlx.img_ptr, 0, 0);
+	draw_ammo_hud(game);
 	draw_press_e_hint(game);
 	draw_death_message(game);
 	handle_death_and_respawn(game);
